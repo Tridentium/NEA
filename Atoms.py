@@ -6,31 +6,37 @@ class Hydrogen(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Hydrogen"
+        self.symbol = "H"
 
 class Chlorine(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Chlorine"
+        self.symbol = "Cl"
 
 class Bromine(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Bromine"
+        self.symbol = "Br"
         
 class HydroxyGroup(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Hydroxy"
+        self.symbol = "OH"
 
 class AmideGroup(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Amide"
+        self.symbol = "NH2"
         
 class Oxygen(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Oxygen"
+        self.symbol = "O"
 
 class BondableAtom(Atom):
     def __init__(self):
@@ -50,6 +56,9 @@ class BondableAtom(Atom):
         for i in self.bonds:
             output += "(" + i.element + ")"
         return output
+    
+    def getAtoms(self):
+        return self.bonds
 
     
 class Carbon(BondableAtom):

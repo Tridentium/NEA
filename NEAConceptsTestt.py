@@ -54,10 +54,9 @@ class Molecule():
             
     def decideAtom(self, index):
         diceRoll = random.randint(0, 100)
-        if diceRoll <= 100:
+        if diceRoll <= 90:
             hydrogen = atom.Hydrogen()  
             return hydrogen
-        
         elif diceRoll <= 95:
             if not str(index) in self.addedGroups:
                 self.addedGroups[str(index)] = ["Chloro"]
@@ -105,7 +104,7 @@ class Molecule():
                 return functionalGroup.name
         else:
             diceRoll = random.randint(0, 100)
-            if diceRoll <= 100:
+            if diceRoll <= 25:
                 functionalGroup = fg.Alkane()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
@@ -159,6 +158,11 @@ class Molecule():
             name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + self.stem
         return name
     
-# newMolecule = Molecule(10)
-# newMolecule.generate()
-# newMolecule.outputMolecule()
+    def getSymbols(self, index):
+        symbols = []
+        for i in self.atoms[index].getAtoms():
+            symbols.append(i.symbol)
+        return symbols    
+newMolecule = Molecule(10)
+newMolecule.generate()
+newMolecule.outputMolecule()
