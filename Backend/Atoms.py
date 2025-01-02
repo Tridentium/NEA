@@ -39,17 +39,21 @@ class Oxygen(Atom):
         self.symbol = "O"
 
 class BondableAtom(Atom):
+    
+    # Define variables
     def __init__(self):
         super().__init__()
         self.bonds = []
         self.bondCount = None
         self.maxBondCount = None
     
+    # Add an atom object to the bonds list
     def addBondedAtom(self, atom):
         if self.bondCount < self.maxBondCount:
             self.bonds.append(atom)
             self.bondCount += 1
     
+    # Output the carbon and its bonds for debugging
     def returnAtomState(self):
         output = ""
         output += self.element
@@ -57,6 +61,7 @@ class BondableAtom(Atom):
             output += "(" + i.element + ")"
         return output
     
+    # Return the atoms in the bonds list
     def getAtoms(self):
         return self.bonds
 
