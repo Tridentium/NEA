@@ -1,0 +1,15 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'tester/register.css' %}">
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>My test page</title>
+  </head>
+  <body>
+    <h1>Register Page</h1>
+    <h2>Links:</h2>
+    <a href = "{% url 'tester:login' %}">Login</a>
+  </body>
+</html>

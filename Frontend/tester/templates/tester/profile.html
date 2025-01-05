@@ -1,0 +1,17 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'tester/profile.css' %}">
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>My test page</title>
+  </head>
+  <body>
+    <h1>It begins. profile</h1>
+    <h2>Test page:</h2>
+    <a href = "{% url 'tester:index' %}">Index</a>
+    <a href = "{% url 'tester:login' %}">Login</a>
+    <a href = "{% url 'tester:studentdata' %}">Studen Data (only visible to verified teachers)</a>
+  </body>
+</html>
