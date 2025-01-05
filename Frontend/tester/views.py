@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
+import NEAConceptsTestt as MoleculeGenerator
 
 
 def index(request):
@@ -16,7 +17,11 @@ def studentdata(request):
 def testsettings(request):
     return render(request, "tester/testsettings.html", {})
 def question(request):
-    return render(request, "tester/question.html", {})
+    testMolecule = MoleculeGenerator.Molecule(3)
+    testMolecule.generate()
+    nameForPrinting  = testMolecule.outputMolecule()
+    context = {"molecule_name" : nameForPrinting}
+    return render(request, "tester/question.html", context)
 def answer(request):
     return render(request, "tester/answer.html", {})
 # Create your views here.

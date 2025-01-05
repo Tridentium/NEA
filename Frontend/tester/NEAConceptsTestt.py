@@ -2,6 +2,7 @@ import random
 import Atoms as atom
 import FunctionalGroups as fg
 
+
 # List of IUPAC main prefixes
 IUPACLengthStems = ["meth", "eth", "prop", "but", "pent", "hex", "hept", "oct", "non", "dec"]
 
@@ -252,7 +253,7 @@ class Molecule():
             
         # Add functional group name, position and main length stem to name
         else:
-            name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + self.stem
+            name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)
         return name
     
     # Get symbols on atoms for rendering
@@ -265,6 +266,7 @@ class Molecule():
         return symbols
 
 # Debugging functions
-newMolecule = Molecule(10)
+newMolecule = Molecule(3)
 newMolecule.generate()
-newMolecule.outputMolecule()
+print(newMolecule.outputMolecule())
+
