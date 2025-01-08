@@ -1,5 +1,4 @@
 {% load static %}
-{% load tag %}
 <link rel="stylesheet" href="{% static 'tester/question.css' %}">
 <!doctype html>
 <html lang="en-US">
@@ -15,5 +14,6 @@
     <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
 
     <strong> {{ molecule_name }} </strong>
+    {{ image|safe }}
   </body>
 </html>

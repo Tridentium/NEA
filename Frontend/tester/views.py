@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-import NEAConceptsTestt as MoleculeGenerator
+import tester.NEAConceptsTestt as MoleculeGenerator
+import tester.SVGtest as SVGGenerator
 
 
 def index(request):
@@ -17,10 +18,14 @@ def studentdata(request):
 def testsettings(request):
     return render(request, "tester/testsettings.html", {})
 def question(request):
-    testMolecule = MoleculeGenerator.Molecule(3)
+    testMolecule = MoleculeGenerator.Molecule(10)
     testMolecule.generate()
     nameForPrinting  = testMolecule.outputMolecule()
-    context = {"molecule_name" : nameForPrinting}
+    
+    svg = SVGGenerator.createSVG(testMolecule.length, testMolecule)
+    
+    context = {"molecule_name" : nameForPrinting, "image" : svg}
+     
     return render(request, "tester/question.html", context)
 def answer(request):
     return render(request, "tester/answer.html", {})

@@ -1,6 +1,6 @@
 import random
-import Atoms as atom
-import FunctionalGroups as fg
+import tester.Atoms as atom
+import tester.FunctionalGroups as fg
 
 
 # List of IUPAC main prefixes

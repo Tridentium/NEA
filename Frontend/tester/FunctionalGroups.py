@@ -1,4 +1,4 @@
-import Atoms as atom
+import tester.Atoms as atom
 
 class FunctionalGroup():
     def __init__(self):

@@ -2,7 +2,7 @@ import svgwrite
 import sys
 import random
 from PySide6 import QtCore, QtWidgets, QtGui, QtSvgWidgets
-import NEAConceptsTestt as NEAT
+import tester.NEAConceptsTestt as NEAT
 
 def createSVG(length, molecule):
     
@@ -11,7 +11,7 @@ def createSVG(length, molecule):
     resolutionY = 1080
 
     # Create SVG
-    svg_document = svgwrite.Drawing(filename = "test-svgwrite.svg",
+    svg_document = svgwrite.Drawing(filename = "./tester/test-svgwrite.svg",
                                     size = (str(resolutionX) + "px", str(resolutionY) + "px"))
 
     # Record the number of carbons in the molecule
@@ -137,7 +137,8 @@ def createSVG(length, molecule):
             hlines.add(svg_document.line(start=(X + 20, resolutionY/2), end=(((i+2) * (resolutionX/(numberofCs+5))) - 8, resolutionY/2)))
 
     # Save the svg
-    svg_document.save()
+    # svg_document.save()
+    return svg_document.tostring()
 
 
 # DEBUG: Generate molecule and render it  
@@ -148,17 +149,17 @@ createSVG(molecule.length, molecule)
 
 
 # DEBUG: Display SVG
-class MyWidget(QtSvgWidgets.QSvgWidget):
-    def __init__(self):
-        super().__init__()
-        self.text = QtWidgets.QLabel(str(molecule.outputMolecule()),
-                                     alignment=QtCore.Qt.AlignHCenter)
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.text.setFont(font)
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.text)
-        self.load("test-svgwrite.svg")
+# class MyWidget(QtSvgWidgets.QSvgWidget):
+#     def __init__(self):
+#         super().__init__()
+#         self.text = QtWidgets.QLabel(str(molecule.outputMolecule()),
+#                                      alignment=QtCore.Qt.AlignHCenter)
+#         font = QtGui.QFont()
+#         font.setPointSize(20)
+#         self.text.setFont(font)
+#         self.layout = QtWidgets.QVBoxLayout(self)
+#         self.layout.addWidget(self.text)
+#         self.load("test-svgwrite.svg")
         
         
 if __name__ == "__main__":
