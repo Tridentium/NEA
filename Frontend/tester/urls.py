@@ -10,6 +10,7 @@ urlpatterns = [
     path("account/", views.profile, name="profile"),
     path("students/", views.studentdata, name="studentdata"),
     path("test/testsettings/", views.testsettings, name="testsettings"),
-    path("test/question/", views.question, name="question"),
+    path("settestsettings/", views.settestsettings, name="settestsettings"),
+    path("test/question/<int:selected_length>", views.question, name="question"),
     path("test/answer/", views.answer, name="answer"),
 ]

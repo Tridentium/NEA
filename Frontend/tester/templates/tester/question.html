@@ -9,11 +9,17 @@
   <body>
     <h1>Question Page</h1>
     <h2>Links:</h2>
+    <div>
     <a href = "{% url 'tester:answer' %}">Answer</a>
+    <br>
     <a href = "{% url 'tester:login' %}">Login</a>
+    <br>
     <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
-
+    <br>
     <strong> {{ molecule_name }} </strong>
     {{ image|safe }}
+    </div>
+    
+   
   </body>
 </html>

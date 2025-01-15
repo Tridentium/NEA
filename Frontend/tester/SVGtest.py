@@ -7,8 +7,8 @@ import tester.NEAConceptsTestt as NEAT
 def createSVG(length, molecule):
     
     # Define SVG dimensions
-    resolutionX = 1920
-    resolutionY = 1080
+    resolutionX = 1920/4
+    resolutionY = 1080/4
 
     # Create SVG
     svg_document = svgwrite.Drawing(filename = "./tester/test-svgwrite.svg",

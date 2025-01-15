@@ -8,10 +8,64 @@
     <title>My test page</title>
   </head>
   <body>
+    <!-- Page title -->
     <h1>Test Settings</h1>
-    <h2>Links:</h2>
-    <a href = "{% url 'tester:question' %}">Question</a>
-    <a href = "{% url 'tester:index' %}">Index</a>
-    <a href = "{% url 'tester:login' %}">Login</a>
+
+    <!-- Define form -->
+    <form action="{% url 'tester:settestsettings' %}" method="post">
+
+      <!-- Implements Django's protections against Cross Site Request Forgeries -->
+      {% csrf_token %}
+      
+      <fieldset>
+      <!-- Create Molecule Length Slider -->
+      <div>
+      <input type="range" name="MolLength" id="MolLength" min = "2" max = "10" value = 5 step = 1 list = "markers">
+      <label>Maximum molecule length slider: <output id="value"></output></label><br>
+
+      <!-- Add graduations to the slider -->
+      <datalist id="markers">
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+        <option value="5"></option>
+        <option value="6"></option>
+        <option value="7"></option>
+        <option value="8"></option>
+        <option value="9"></option>
+        <option value="10"></option>
+      </datalist>
+
+      <!-- Update the displayed value of the slider -->
+      <script>
+        const value = document.querySelector("#value");
+        const input = document.querySelector("#MolLength");
+        value.textContent = input.value;
+        input.addEventListener("input", (event) => {
+          value.textContent = event.target.value;
+        });
+      </script>
+      </div>
+
+      <!-- Create Functional Group Radio Options -->
+      <div>
+        <h2>Select Desired Functional Groups: </h2>
+        <input type="checkbox" name="FuncGroup" id="alkane" value = "alkane">
+        <label>Alkane</label>
+
+        <input type="checkbox" name="FuncGroup" id="alkane" value = "alkene">
+        <label>Alkene</label>
+
+        <input type="checkbox" name="FuncGroup" id="alkane" value = "alcohol">
+        <label>Alcohol</label>
+
+        <input type="checkbox" name="FuncGroup" id="alkane" value = "amine">
+        <label>Amine</label>
+      </div>
+
+
+      <!-- Create Submit Entry Button -->
+      <input type="submit" value="Submit">
+    </form>
   </body>
 </html>
