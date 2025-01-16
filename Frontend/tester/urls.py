@@ -11,6 +11,6 @@ urlpatterns = [
     path("students/", views.studentdata, name="studentdata"),
     path("test/testsettings/", views.testsettings, name="testsettings"),
     path("settestsettings/", views.settestsettings, name="settestsettings"),
-    path("test/question/<int:selected_length>", views.question, name="question"),
+    path("test/question/<int:selected_length>/", views.question, name="question"),
     path("test/answer/", views.answer, name="answer"),
 ]

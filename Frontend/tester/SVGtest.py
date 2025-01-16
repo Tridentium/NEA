@@ -7,7 +7,7 @@ import tester.NEAConceptsTestt as NEAT
 def createSVG(length, molecule):
     
     # Define SVG dimensions
-    resolutionX = 1920/4
+    resolutionX = int(1920/((15-length)/3))
     resolutionY = 1080/4
 
     # Create SVG
@@ -43,7 +43,7 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define x and y values of its position
-            x = (X - resolutionX/(numberofCs+5), X + resolutionX/(numberofCs+5)), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X - resolutionX/(numberofCs+5), ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add first bond line
             hlines.add(svg_document.line(
@@ -58,13 +58,13 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text("C",
 
             # Define its x and y position
-            x = (X, X), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X, ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add the second symbol
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its x and y position
-            x = (X, X), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X,), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count
             symNum += 1
@@ -73,7 +73,7 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its x and y position
-            x = (X, X), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X, ), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add the two remaining bond lines 
             hlines.add(svg_document.line(start=(X + 8, resolutionY/3 + 15), end=(X + 8, resolutionY/2 - 15)))
@@ -86,25 +86,25 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its X and Y position
-            x = (X + resolutionX/(numberofCs+5), X + resolutionX/(numberofCs+5)), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X + resolutionX/(numberofCs+5), ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count to access the next symbol
             symNum += 1
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
-            x = (X, X), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X,), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add the next symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X, X), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X,), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count to access the next symbol
             symNum += 1
             
             # Add the final symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X, X), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X,), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add the bond lines 
             hlines.add(svg_document.line(start=(X + 8, resolutionY/3 + 15), end=(X + 8, resolutionY/2 - 15)))
@@ -114,18 +114,18 @@ def createSVG(length, molecule):
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
-            x = (X, X), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X, ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add the first symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X, X), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X, ), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count by 1
             symNum += 1
             
             # Add the next symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X, X), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (X, ), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
             
             # Add the bond lines
             hlines.add(svg_document.line(start=(X + 8, resolutionY/3 + 15), end=(X + 8, resolutionY/2 - 15)))
@@ -142,9 +142,9 @@ def createSVG(length, molecule):
 
 
 # DEBUG: Generate molecule and render it  
-molecule = NEAT.Molecule(10)
-molecule.generate()
-createSVG(molecule.length, molecule)
+# molecule = NEAT.Molecule(10)
+# molecule.generate()
+# createSVG(molecule.length, molecule)
 
 
 

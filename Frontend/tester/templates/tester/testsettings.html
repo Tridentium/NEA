@@ -16,8 +16,10 @@
 
       <!-- Implements Django's protections against Cross Site Request Forgeries -->
       {% csrf_token %}
-      
+
+      <br><br><br>
       <fieldset>
+      <br><br>
       <!-- Create Molecule Length Slider -->
       <div>
       <input type="range" name="MolLength" id="MolLength" min = "2" max = "10" value = 5 step = 1 list = "markers">
@@ -47,25 +49,75 @@
       </script>
       </div>
 
+      <br><br><br>
       <!-- Create Functional Group Radio Options -->
       <div>
         <h2>Select Desired Functional Groups: </h2>
-        <input type="checkbox" name="FuncGroup" id="alkane" value = "alkane">
+        <br>
+        <input type="checkbox" name="FuncGroup[]" id="alkane" value = "alkane">
         <label>Alkane</label>
 
-        <input type="checkbox" name="FuncGroup" id="alkane" value = "alkene">
+        <input type="checkbox" name="FuncGroup[]" id="alkene" value = "alkene">
         <label>Alkene</label>
 
-        <input type="checkbox" name="FuncGroup" id="alkane" value = "alcohol">
+        <input type="checkbox" name="FuncGroup[]" id="alcohol" value = "alcohol">
         <label>Alcohol</label>
 
-        <input type="checkbox" name="FuncGroup" id="alkane" value = "amine">
+        <input type="checkbox" name="FuncGroup[]" id="amine" value = "amine">
         <label>Amine</label>
+        
+        <input type="checkbox" name="FuncGroup[]" id="ketone" value = "ketone">
+        <label>Ketone</label>
+
+        <br>
+
+
+        <input type="checkbox" name="FuncGroup[]" id="carboxylic_acid" value = "carboxylic_acid">
+        <label>Carboxylic Acid</label>
+
+        <input type="checkbox" name="FuncGroup[]" id="aldehyde" value = "aldehyde">
+        <label>Aldehyde</label>
+
+        <input type="checkbox" name="FuncGroup[]" id="acyl_chloride" value = "acyl_chloride">
+        <label>Acyl Chloride</label>
+
+        <input type="checkbox" name="FuncGroup[]" id="amide" value = "amide">
+        <label>Amide</label>
+      </div>
+
+      <br><br><br>
+      <!-- Create test length slider -->
+      <div>
+        <input type="range" name="TestLength" id="TestLength" min = "1" max = "50" value = 10 step = 1 list = "length_markers">
+        <label>Number of questions in test: <output id="length_value"></output></label><br>
+  
+        <!-- Add graduations to the slider -->
+        <datalist id="length_markers">
+          <option value="1"></option>
+          <option value="10"></option>
+          <option value="20"></option>
+          <option value="30"></option>
+          <option value="40"></option>
+          <option value="50"></option>
+        </datalist>
+  
+        <!-- Update the displayed value of the slider -->
+        <script>
+          const length_value = document.querySelector("#length_value");
+          const length_input = document.querySelector("#TestLength");
+          length_value.textContent = length_input.value;
+          length_input.addEventListener("input", (event) => {
+            length_value.textContent = event.target.value;
+          });
+        </script>
       </div>
 
 
       <!-- Create Submit Entry Button -->
+      <div>
+      <br><br>
       <input type="submit" value="Submit">
+      </div>
     </form>
   </body>
 </html>

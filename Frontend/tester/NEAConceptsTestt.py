@@ -10,7 +10,7 @@ IUPACLengthStems = ["meth", "eth", "prop", "but", "pent", "hex", "hept", "oct", 
 class Molecule():
     
     # Define Variables for molecule
-    def __init__(self, maxLength):
+    def __init__(self, maxLength, valid_groups):
         self.atoms = []
         self.maxLength = maxLength
         self.functionalGroupName = ""
@@ -19,6 +19,7 @@ class Molecule():
         self.funcEndBool = False
         self.functionGroupPos = 0
         self.addedGroups = {}
+        self.validGroups = valid_groups
     
     # Generate an instance of a molecule
     def generate(self):
@@ -117,7 +118,7 @@ class Molecule():
             diceRoll = random.randint(0, 100)
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            if diceRoll <= 20:
+            if diceRoll <= 20 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.EndAlcohol()
@@ -126,7 +127,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 40:
+            elif diceRoll <= 40 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.EndAlcohol()
@@ -135,7 +136,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 60:
+            elif diceRoll <= 60 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.EndAlcohol()
@@ -144,7 +145,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 80:
+            elif diceRoll <= 80 and "amide" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Amide()
@@ -153,20 +154,23 @@ class Molecule():
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 100:
+            elif diceRoll <= 100 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.EndAlcohol()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
                 return functionalGroup.name
+
+            else:
+                return self.addFunctionalGroup(carbon, funcEndBool)
         else:
             
             # Generates random number to decide which functional group will be added to the molecule
             diceRoll = random.randint(0, 100)
             
             # 25% chance that the molecule will be an Alkane
-            if diceRoll <= 25:
+            if diceRoll <= 25 and "alkane" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alkane()
@@ -175,7 +179,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 25% chance that the molecule will be an Amine
-            elif diceRoll <= 50:
+            elif diceRoll <= 50 and "amine" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Amine()
@@ -184,7 +188,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 25% chance that the molecule will be an Alcohol
-            elif diceRoll <= 75:
+            elif diceRoll <= 75 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alcohol()
@@ -193,13 +197,15 @@ class Molecule():
                 return functionalGroup.name
             
             # 25% chance that the molecule will be an Alcohol
-            elif diceRoll <= 100:
+            elif diceRoll <= 100 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alcohol()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
                 return functionalGroup.name
+            else:
+                return self.addFunctionalGroup(carbon, funcEndBool)
 
 
     def outputMolecule(self):
@@ -266,7 +272,7 @@ class Molecule():
         return symbols
 
 # Debugging functions
-newMolecule = Molecule(3)
-newMolecule.generate()
-print(newMolecule.outputMolecule())
+# newMolecule = Molecule(3)
+# newMolecule.generate()
+# print(newMolecule.outputMolecule())
 
