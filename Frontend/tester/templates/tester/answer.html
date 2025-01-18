@@ -10,8 +10,18 @@
   <body>
     <h1>It begins. answer</h1>
     <h2>Test page:</h2>
-    <a href = "{% url 'tester:question' %}">Question</a>
+    <div>
     <a href = "{% url 'tester:login' %}">Login</a>
     <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
+    </div>
+    <div>
+    <h2>Actual answer:</h2>
+    <br>
+    {{ svg|safe }}
+    <br>
+    {{nameForPrinting}}
+    <h2>Your answer:</h2>
+    {{ user_answer }}
+    </div>
   </body>
 </html>

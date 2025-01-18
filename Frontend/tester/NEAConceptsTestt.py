@@ -209,28 +209,35 @@ class Molecule():
 
 
     def outputMolecule(self):
-        
-        # Remove in final product
-        print(self.functionalGroupName)
-        
-        # Remove in final product
-        for i in self.atoms:
-            print(i.returnAtomState())
-         
          
         # Create name variable    
         name = ""
         
         # Define dictionary for adding prefix groups
         addedGroupsDict = {
-                            "Chloro": [],
-                            "Bromo": []
+                            "Bromo": [],
+                            "Chloro": []
                             }
         
         # Loop through added prefix groups on each carbon add them and their positions to the dictionary 
         for x, y in self.addedGroups.items():
             for i in y:
                 addedGroupsDict[i].append(str(int(x) + 1))
+        
+        # Minimise the value of the functional group position via rotation
+        if self.functionGroupPos + 1 > self.length // 2:
+           self.functionGroupPos = self.length - self.functionGroupPos - 1
+           
+           tempBromo = []
+           tempChloro = []
+           for i in addedGroupsDict["Chloro"]:
+               tempChloro.append(str(self.length - int(i) + 1))
+           for i in addedGroupsDict["Bromo"]:
+               tempBromo.append(str(self.length - int(i) + 1))
+           tempBromo.sort()
+           tempChloro.sort()
+           addedGroupsDict["Bromo"] = tempBromo
+           addedGroupsDict["Chloro"] = tempChloro
         
         # Loop through the items in addedGroupsDict
         for x, y in addedGroupsDict.items():
@@ -249,14 +256,15 @@ class Molecule():
                         name += ","
                     name = name[:-1]    
                 name += "-" + x + "-"
+                
         # Remove the last , or - to allow it to combine with the main stem
         if len(name) > 0:
             name = name[:-1]
         
-        # No functional group name needde for an alkane
+        # No functional group name needed for an alkane
         if self.funcEndBool or self.functionalGroupName == "Alkane":
             name += IUPACLengthStems[self.length - 1] + self.stem
-            
+        
         # Add functional group name, position and main length stem to name
         else:
             name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)

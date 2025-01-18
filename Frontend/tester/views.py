@@ -27,11 +27,6 @@ def testsettings(request):
 def settestsettings(request):
     
     selected_length = request.POST["MolLength"]
-    # selected_choice.votes = F("votes") + 1
-    # selected_choice.save()
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data. This prevents data from being posted twice if a
-    # user hits the Back button.
     valid_groups = request.POST.getlist("FuncGroup[]")
     request.session['list'] = valid_groups
     return HttpResponseRedirect(reverse("tester:question", args=(selected_length, )))
@@ -45,9 +40,23 @@ def question(request, selected_length):
     
     svg = SVGGenerator.createSVG(testMolecule.length, testMolecule)
     
+    request.session['molecule_name'] = nameForPrinting
+    request.session['image'] = svg
+    
     context = {"molecule_name" : nameForPrinting, "image" : svg}
      
     return render(request, "tester/question.html", context)
+
+def answerquestion(request):
+    user_answer = request.POST.get('Answer', False)
+    request.session['user_answer'] = user_answer
+    return HttpResponseRedirect(reverse("tester:answer"))
+
+
 def answer(request):
-    return render(request, "tester/answer.html", {})
+    user_answer = request.session['user_answer']
+    nameForPrinting = request.session['molecule_name']
+    svg = request.session['image']
+    context = {"user_answer" : user_answer, "nameForPrinting" : nameForPrinting, "svg" : svg}
+    return render(request, "tester/answer.html", context)
 # Create your views here.

@@ -15,11 +15,30 @@
     <a href = "{% url 'tester:login' %}">Login</a>
     <br>
     <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
-    <br>
+    <br><br><br><br>
+    <div>{{ image|safe }}</div>
+    <br><br><br>  
     <strong> {{ molecule_name }} </strong>
-    {{ image|safe }}
     </div>
     
+
+    <form action="{% url 'tester:answerquestion' %}" method="post">
+
+      <!-- Implements Django's protections against Cross Site Request Forgeries -->
+      {% csrf_token %}
+
+      <br><br><br>
+      <fieldset>
+
+      <!-- Create Answer Input -->
+      <input type="text" name="Answer" value="Answer">
+      <br><br>
+      <!-- Create Submit Entry Button -->
+      <div>
+      <br><br>
+      <input type="submit" value="Submit">
+      </div>
+    </form>
    
   </body>
 </html>
