@@ -6,8 +6,13 @@ import tester.NEAConceptsTestt as NEAT
 
 def createSVG(length, molecule):
     
+    bondLength = 20
+    bondSpacing = 8
+    characterSpacing = 15
+    lineDifference = 7
+    
     # Define SVG dimensions
-    resolutionX = int(1920/((15-length)/3))
+    resolutionX = 1920/4
     resolutionY = 1080/4
 
     # Create SVG
@@ -30,8 +35,6 @@ def createSVG(length, molecule):
         # Increase i by 1 for both atoms
         i += 1
         
-        # Define the length of a horizontal line
-        X = ((i + 1) * (resolutionX/(numberofCs+5)))
         
         # Define a variable to count the number of symbols, allowing different actions based on 1, 2 or 3 attached atoms
         symNum = 0
@@ -43,13 +46,13 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define x and y values of its position
-            x = (X - resolutionX/(numberofCs+5), ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (0, ), y = (bondLength + bondSpacing * 2 + characterSpacing*2, ), style = "font-size:20px; font-family:Arial"))
             
             # Add first bond line
             hlines.add(svg_document.line(
                 
             # Define x and y values of its start and end
-                start=(((i) * (resolutionX/(numberofCs+5))) + 20, resolutionY/2), end=(((i+1) * (resolutionX/(numberofCs+5))) - 8, resolutionY/2)))
+            start=(characterSpacing + bondSpacing, bondLength + bondSpacing * 2 + characterSpacing*2 - lineDifference), end=(bondLength + characterSpacing + bondSpacing, bondLength + bondSpacing * 2 + characterSpacing*2 - lineDifference)))
             
             # Increase the symbol count
             symNum += 1
@@ -58,13 +61,13 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text("C",
 
             # Define its x and y position
-            x = (X, ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength + bondSpacing * 2 + characterSpacing, ), y = (bondLength + bondSpacing * 2 + characterSpacing*2, ), style = "font-size:20px; font-family:Arial"))
             
             # Add the second symbol
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its x and y position
-            x = (X,), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength + bondSpacing * 2 + characterSpacing,), y = (bondSpacing*4 + bondLength*2 + characterSpacing * 3, ), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count
             symNum += 1
@@ -73,11 +76,14 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its x and y position
-            x = (X, ), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength + bondSpacing * 2 + characterSpacing, ), y = (characterSpacing, ), style = "font-size:20px; font-family:Arial"))
             
             # Add the two remaining bond lines 
-            hlines.add(svg_document.line(start=(X + 8, resolutionY/3 + 15), end=(X + 8, resolutionY/2 - 15)))
-            hlines.add(svg_document.line(start=(X + 8, 2*resolutionY/3 - 15), end=(X + 8, resolutionY/2 + 15)))
+            hlines.add(svg_document.line(start=(bondLength + bondSpacing * 2 + characterSpacing + lineDifference, characterSpacing + bondSpacing), end=(bondLength + bondSpacing * 2 + characterSpacing + lineDifference, bondSpacing*2 + bondLength + characterSpacing - lineDifference)))
+            hlines.add(svg_document.line(
+                start=(bondLength + bondSpacing * 2 + characterSpacing + lineDifference, characterSpacing * 2 + bondSpacing * 3 + bondLength), 
+                end=(bondLength + bondSpacing * 2 + characterSpacing + lineDifference, characterSpacing * 2 + bondSpacing * 4 + bondLength * 2)
+                ))
             
             
         elif i == numberofCs:
@@ -86,55 +92,55 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its X and Y position
-            x = (X + resolutionX/(numberofCs+5), ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength * numberofCs + bondSpacing * (numberofCs + 1) + characterSpacing * numberofCs, ), y = (bondLength + bondSpacing, ), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count to access the next symbol
             symNum += 1
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
-            x = (X,), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = ((bondLength - 1) * numberofCs + bondSpacing * numberofCs + characterSpacing * (numberofCs - 1),), y = (bondLength + bondSpacing, ), style = "font-size:20px; font-family:Arial"))
             
             # Add the next symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X,), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = ((bondLength - 1) * numberofCs + bondSpacing * numberofCs + characterSpacing * (numberofCs - 1),), y = (bondSpacing, ), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count to access the next symbol
             symNum += 1
             
             # Add the final symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X,), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = ((bondLength - 1) * numberofCs + bondSpacing * numberofCs + characterSpacing * (numberofCs - 1),), y = (bondSpacing*2 + bondLength*2, ), style = "font-size:20px; font-family:Arial"))
             
             # Add the bond lines 
-            hlines.add(svg_document.line(start=(X + 8, resolutionY/3 + 15), end=(X + 8, resolutionY/2 - 15)))
-            hlines.add(svg_document.line(start=(X + 8, 2*resolutionY/3 - 15), end=(X + 8, resolutionY/2 + 15)))
+            hlines.add(svg_document.line(start=(bondLength + bondSpacing, bondSpacing), end=(bondLength + bondSpacing, bondSpacing + bondLength)))
+            hlines.add(svg_document.line(start=(bondSpacing + bondSpacing, bondSpacing * 2 + bondLength), end=(bondLength + bondSpacing, bondSpacing * 2 + bondLength * 2 + characterSpacing)))
             
         else:
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
-            x = (X, ), y = (resolutionY/2 + 8, resolutionY/2 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength * i + bondSpacing * i + characterSpacing * i, ), y = (bondSpacing + bondLength, ), style = "font-size:20px; font-family:Arial"))
             
             # Add the first symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X, ), y = (resolutionY/3 + 8, resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength * i + bondSpacing * i + characterSpacing * i, ), y = (bondSpacing, ), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count by 1
             symNum += 1
             
             # Add the next symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (X, ), y = (2 * resolutionY/3 + 8, 2*resolutionY/3 + 8), style = "font-size:20px; font-family:Arial"))
+            x = (bondLength * i + bondSpacing * i + characterSpacing * i, ), y = (2 * bondSpacing + bondLength * 2, ), style = "font-size:20px; font-family:Arial"))
             
             # Add the bond lines
-            hlines.add(svg_document.line(start=(X + 8, resolutionY/3 + 15), end=(X + 8, resolutionY/2 - 15)))
-            hlines.add(svg_document.line(start=(X + 8, 2*resolutionY/3 - 15), end=(X + 8, resolutionY/2 + 15)))
+            hlines.add(svg_document.line(start=(bondLength * i + bondSpacing * i + characterSpacing * i, bondSpacing), end=(bondLength * i + bondSpacing * i + characterSpacing * i, bondSpacing + bondLength)))
+            hlines.add(svg_document.line(start=(bondLength * i + bondSpacing * i + characterSpacing * i, bondSpacing * 2 + bondLength), end=(bondLength * i + bondSpacing * i + characterSpacing * i, bondSpacing * 2 + bondLength * 2)))
             
         if i != numberofCs + 2:
             
             # Add a bond line to the next carbon on the right unless its the last carbon
-            hlines.add(svg_document.line(start=(X + 20, resolutionY/2), end=(((i+2) * (resolutionX/(numberofCs+5))) - 8, resolutionY/2)))
+            hlines.add(svg_document.line(start=(bondLength * i + bondSpacing * (i+1) + characterSpacing * i, bondLength + bondSpacing), end=(bondLength * i + bondSpacing * (i+1) + characterSpacing * i, bondLength + bondSpacing)))
 
     # Save the svg
     # svg_document.save()
