@@ -10,7 +10,31 @@
   <body>
     <h1>Login Page</h1>
     <h2>Links:</h2>
+    <div>
     <a href = "{% url 'tester:index' %}">Index</a>
     <a href = "{% url 'tester:register' %}">register</a>
+    </div>
+
+    <form action="{% url 'tester:loginaccount' %}" method="post">
+
+      <!-- Implements Django's protections against Cross Site Request Forgeries -->
+      {% csrf_token %}
+
+      <br><br><br>
+      <fieldset>
+      <label>Username: </label>
+      <!-- Create Username Input -->
+      <input type="text" name="Username" value="Username">
+      <br><br>
+      <label>Password: </label>
+      <!-- Create Password Input -->
+      <input type="password" name="Password" value="Password">
+      <br><br>
+      <!-- Create Submit Entry Button -->
+      <div>
+      <br><br>
+      <input type="submit" value="Login">
+      </div>
+    </form>
   </body>
 </html>

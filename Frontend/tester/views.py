@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 import tester.NEAConceptsTestt as MoleculeGenerator
 import tester.SVGtest as SVGGenerator
+import tester.models as models
 from django.urls import reverse
 
 
@@ -16,7 +17,9 @@ def register(request):
     return render(request, "tester/register.html", {})
 
 def profile(request):
-    return render(request, "tester/profile.html", {})
+    user_name = request.session["current_user"]
+    context = {"user_name" : user_name}
+    return render(request, "tester/profile.html", context)
 
 def studentdata(request):
     return render(request, "tester/studentdata.html", {})
@@ -59,4 +62,14 @@ def answer(request):
     svg = request.session['image']
     context = {"user_answer" : user_answer, "nameForPrinting" : nameForPrinting, "svg" : svg}
     return render(request, "tester/answer.html", context)
+
+def registeraccount(request):
+    user = models.User(user_name = request.POST["Username"], password = request.POST["Password"])
+    user.save()
+    print(user.id)
+    return HttpResponseRedirect(reverse("tester:login"))
+
+def loginaccount(request):
+    request.session["current_user"] = request.POST["Username"]
+    return HttpResponseRedirect(reverse("tester:profile"))
 # Create your views here.

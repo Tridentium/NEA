@@ -8,7 +8,7 @@
     <title>My test page</title>
   </head>
   <body>
-    <h1>It begins. answer</h1>
+    <h1 id="Outcome">Answer Outcome</h1>
     <h2>Test page:</h2>
     <div>
     <a href = "{% url 'tester:login' %}">Login</a>
@@ -19,9 +19,18 @@
     <br>
     {{ svg|safe }}
     <br>
-    {{nameForPrinting}}
+    <p id = "nameForPrinting">{{nameForPrinting}}</p>
     <h2>Your answer:</h2>
-    {{ user_answer }}
+    <p id = "user_answer">{{ user_answer }}</p>
     </div>
+
+    <script>
+      if (document.getElementById("user_answer").innerHTML.toLowerCase() == document.getElementById("nameForPrinting").innerHTML.toLocaleLowerCase()) {
+        document.getElementById("Outcome").innerHTML = "Correct";
+      }
+      else{
+        document.getElementById("Outcome").innerHTML = "Incorrect";
+      }
+    </script>
   </body>
 </html>
