@@ -20,16 +20,52 @@
 
       <br><br><br>
       <fieldset>
-      <label>Username: </label>
+  
+      
+      <!-- Create First Name Input -->
+      <label>First Name: </label>
+      <input type="text" name="Firstname" value="Username">
+      <br><br>
+
+      <!-- Create Last Name Input -->
+      <label>Last Name: </label>
+      <input type="text" name="Lastname" value="Username">
+      <br><br>
+
       <!-- Create Username Input -->
+      <label>Username: </label>
       <input type="text" name="Username" value="Username">
       <br><br>
+      
+      <!-- Create Email Input -->
+      <label>Email: </label>
+      <input type="text" name="Email" value="Email">
+      <br><br>
+
+      <!-- Create Confirm Email Input -->
+      <label>Confirm Email: </label>
+      <input type="text" name="ConfirmEmail" value="Email">
+      <br><br>
+
+      <!-- Create Confirm Email Input -->
       <label>Password: </label>
-      <!-- Create Password Input -->
       <input type="password" name="Password" value="Password">
       <br><br>
+
+      <!-- Create Confirm Email Input -->
+      <label>Confirm Password: </label>
+      <input type="password" name="ConfirmPassword" value="ConfirmPassword">
+      <br><br>
+
+      <!-- Create Class Input -->
+      <label>Class: </label>
+      <input type="password" name="Class" value="Class">
+      <br><br>
+
       <!-- Create Submit Entry Button -->
       <div>
+
+      <p id = "ErrorMessage">{{ ErrorMessage }}</p>
       <br><br>
       <input type="submit" value="Register">
       </div>

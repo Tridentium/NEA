@@ -32,5 +32,13 @@
         document.getElementById("Outcome").innerHTML = "Incorrect";
       }
     </script>
+        <form action="{% url 'tester:newquestion' %}" method="post">
+          {% csrf_token %}
+          <fieldset>
+          <br><br>
+          <input type="submit" value="New Question">
+          </div>
+          </fieldset>
+        </form>
   </body>
 </html>

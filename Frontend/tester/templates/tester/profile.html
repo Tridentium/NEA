@@ -13,9 +13,18 @@
     <div>
     <a href = "{% url 'tester:index' %}">Index</a>
     <a href = "{% url 'tester:login' %}">Login</a>
-    <a href = "{% url 'tester:studentdata' %}">Studen Data (only visible to verified teachers)</a>
+    <a href = "{% url 'tester:studentdata' %}">Student Data (only visible to verified teachers)</a>
     </div>
-
-    <p>{{ user_name }}</p>
+    <div>
+    <hr>
+    <vr>
+    <p>Username: {{ user_name }}</p>
+    <hr>
+    <p>Email: {{ email }}</p>
+    <hr>
+    <p>Class: {{ class }}</p>
+    <hr>
+    </vr>
+    </div>
   </body>
 </html>

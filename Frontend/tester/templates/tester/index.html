@@ -14,6 +14,13 @@
     <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
     <a href = "{% url 'tester:login' %}">Login</a>
     <a href = "{% url 'tester:profile' %}">Account</a>
-   </div>  
+   </div>
+   <form action="{% url 'tester:newquestion' %}" method="post">
+
+    <br><br>
+    <input type="submit" value="Login">
+    </div>
+
+  </form>  
   </body>
 </html>
