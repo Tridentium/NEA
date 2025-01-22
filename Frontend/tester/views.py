@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 import tester.NEAConceptsTestt as MoleculeGenerator
 import tester.SVGtest as SVGGenerator
-import tester.models as models
+import tester.DatabaseManagement as models
 from django.urls import reverse
 import django.utils.timezone as time
 
@@ -28,8 +28,8 @@ def register(request):
     return render(request, "tester/register.html", context)
 
 def profile(request):
-    user = models.User.objects.get(user_name = request.session["current_user"])    
-    context = {"user_name" : user.user_name, "email" : user.email, "class" : user.user_class}
+    # user = models.User.objects.get(user_name = request.session["current_user"])    
+    # context = {"user_name" : user.user_name, "email" : user.email, "class" : user.user_class}
     return render(request, "tester/profile.html", context)
 
 def studentdata(request):
@@ -40,7 +40,7 @@ def testsettings(request):
 
 def settestsettings(request):
     
-    selected_length = request.POST["MolLengt    h"]
+    selected_length = request.POST["MolLength"]
     valid_groups = request.POST.getlist("FuncGroup[]")
     request.session['list'] = valid_groups
     request.session["requested_length"] = selected_length
@@ -58,9 +58,6 @@ def question(request, selected_length):
     request.session['molecule_name'] = nameForPrinting
     request.session['image'] = svg
     
-    current_user = models.User.objects.get(user_name = request.session["current_user"])
-    current_user.most_recent_question = models.Question(molecule_name = nameForPrinting, question_date = time.datetime)
-    
     context = {"molecule_name" : nameForPrinting, "image" : svg}
      
     return render(request, "tester/question.html", context)
@@ -68,7 +65,6 @@ def question(request, selected_length):
 def answerquestion(request):
     user_answer = request.POST.get('Answer', False)
     request.session['user_answer'] = user_answer
-    current_user = models.User.objects.get(request.session["current_user"])
     return HttpResponseRedirect(reverse("tester:answer"))
 
 
@@ -81,15 +77,12 @@ def answer(request):
 
 def registeraccount(request):
     if request.POST["Email"] == request.POST["ConfirmEmail"] and request.POST["Password"] == request.POST["ConfirmPassword"]:
-        user = models.User(
-            user_name = request.POST["Username"], 
-            password = request.POST["Password"],
-            first_name = request.POST["Firstname"],
-            last_name = request.POST["Lastname"],
-            email = request.POST["Email"],
-            user_class = request.POST["class"],)
-        user.save()
-        print(user.id)
+        models.createUser(request.POST["Username"], 
+                          request.POST["Password"], 
+                          request.POST["Firstname"], 
+                          request.POST["Lastname"],
+                          request.POST["Email"],
+                          request.POST["Class"])
         request.session["ErrorMessage"] = ""
         return HttpResponseRedirect(reverse("tester:login"))
     elif request.POST["Email"] == request.POST["ConfirmEmail"]:
