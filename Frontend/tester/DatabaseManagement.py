@@ -18,6 +18,18 @@ mycursor = mydb.cursor()
 #                  last_name VARCHAR(255),
 #                  user_class VARCHAR(255));
 #                  """)
+# mydb.commit()
+
+# mycursor.execute("""CREATE TABLE Question
+#                    (id INT AUTO_INCREMENT PRIMARY KEY,
+#                   molecule_name VARCHAR(255),
+#                   question_datetime DATETIME,
+#                   user_id INT,
+#                   outcome BOOL,
+#                   FOREIGN KEY (user_id) REFERENCES Student(id));
+#                   """)
+
+# mydb.commit()
 
 def createUser(user_name, password, first_name, last_name, email, user_class):
 
@@ -33,8 +45,80 @@ def createUser(user_name, password, first_name, last_name, email, user_class):
                      VALUES('{user_name}', '{password}', '{first_name}', '{last_name}', '{email}', '{user_class}');""")
     mydb.commit()
     
-print(mycursor.execute("""INSERT INTO Student (user_name, password, email, first_name, last_name, user_class)
-                       VALUES('TestUser', 'abc', 'value@gmail.com', 'FirstName', 'LastName', 'Class1');"""))
-mydb.commit()
-mycursor.execute("""DELETE FROM Student WHERE id != 1""")
-print(mycursor.fetchall())
+def returnUserPassword(user_name):
+  
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="Admin",
+      password="Perfectnova123!",
+      database = "testerdb"
+      )   
+
+    mycursor = mydb.cursor()
+    mycursor.execute(f"""SELECT password FROM Student WHERE user_name = '{user_name}'""")
+    return mycursor.fetchall()[0][0]
+
+def returnUserEmail(user_name):
+  
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="Admin",
+      password="Perfectnova123!",
+      database = "testerdb"
+      )   
+
+    mycursor = mydb.cursor()
+    mycursor.execute(f"""SELECT email FROM Student WHERE user_name = '{user_name}'""")
+    return mycursor.fetchall()[0][0]
+
+def returnUserClass(user_name):
+  
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="Admin",
+      password="Perfectnova123!",
+      database = "testerdb"
+      )   
+
+    mycursor = mydb.cursor()
+    mycursor.execute(f"""SELECT user_class FROM Student WHERE user_name = '{user_name}'""")
+    return mycursor.fetchall()[0][0]
+
+def returnUserID(user_name):
+  
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="Admin",
+      password="Perfectnova123!",
+      database = "testerdb"
+      )   
+
+    mycursor = mydb.cursor()
+    mycursor.execute(f"""SELECT user_class FROM Student WHERE user_name = '{user_name}'""")
+    return mycursor.fetchall()[0][0]
+
+def createQuestion(molecule_name, question_datetime, user_id, outcome):
+
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="Admin",
+      password="Perfectnova123!",
+      database = "testerdb"
+      )   
+
+    mycursor = mydb.cursor()
+    mycursor.execute(f"""INSERT INTO Question (molecule_name, question_datetime, user_id, outcome)
+                     VALUES('{molecule_name}', '{question_datetime}', '{user_id}', '{outcome}');""")
+    mydb.commit()
+
+
+def getQuestionsAnsweredByUser(user_name):
+  mydb = mysql.connector.connect(
+    host="localhost",
+    user="Admin",
+    password="Perfectnova123!",
+    database = "testerdb"
+    )   
+
+  mycursor = mydb.cursor()
+  mycursor.execute(f"""SELECT Question.molecule_name FROM Question, Student WHERE Question.user_id = Student.id AND Student.user_name = {user_name}""")

@@ -6,6 +6,8 @@ import tester.SVGtest as SVGGenerator
 import tester.DatabaseManagement as models
 from django.urls import reverse
 import django.utils.timezone as time
+import time as systime
+import datetime
 
 
 def index(request):
@@ -28,8 +30,8 @@ def register(request):
     return render(request, "tester/register.html", context)
 
 def profile(request):
-    # user = models.User.objects.get(user_name = request.session["current_user"])    
-    # context = {"user_name" : user.user_name, "email" : user.email, "class" : user.user_class}
+    user_name = request.session["current_user"]
+    context = {"user_name" : user_name, "email" : models.returnUserEmail(user_name), "class" : models.returnUserClass(user_name)}
     return render(request, "tester/profile.html", context)
 
 def studentdata(request):
@@ -44,6 +46,8 @@ def settestsettings(request):
     valid_groups = request.POST.getlist("FuncGroup[]")
     request.session['list'] = valid_groups
     request.session["requested_length"] = selected_length
+    request.session["max_test_length"] = request.POST["TestLength"]
+    request.session["questions_completed"] = 0
     return HttpResponseRedirect(reverse("tester:question", args=(selected_length, )))
 
 def question(request, selected_length):
@@ -69,10 +73,30 @@ def answerquestion(request):
 
 
 def answer(request):
+    request.session["questions_completed"] += 1
     user_answer = request.session['user_answer']
     nameForPrinting = request.session['molecule_name']
+    
+    if user_answer.lower() == nameForPrinting.lower():
+        outcome = 1
+    else:
+        outcome = 0
+    
+    user_name = request.session["current_user"]
+    user_id = models.returnUserID(user_name)
+    current_time = datetime.datetime.fromtimestamp(systime.mktime(systime.gmtime()))
+    print(current_time)
+    models.createQuestion(nameForPrinting, current_time, user_id, outcome)
+    
     svg = request.session['image']
-    context = {"user_answer" : user_answer, "nameForPrinting" : nameForPrinting, "svg" : svg}
+    if int(request.session["questions_completed"]) < int(request.session["max_test_length"]):
+        button_text = "Next Question"
+        request.session["test_over"] = "n"
+    else:
+        button_text = "Finish Test"
+        request.session["test_over"] = "y"
+    context = {"user_answer" : user_answer, "nameForPrinting" : nameForPrinting, "svg" : svg, "button_text" : button_text}
+    
     return render(request, "tester/answer.html", context)
 
 def registeraccount(request):
@@ -94,7 +118,7 @@ def registeraccount(request):
 
 def loginaccount(request):
     try:
-        if models.User.objects.get(user_name = request.POST["Username"]).password == request.POST["Password"]:
+        if models.returnUserPassword(request.POST["Username"]) == request.POST["Password"]:
             request.session["current_user"] = request.POST["Username"]
             return HttpResponseRedirect(reverse("tester:profile"))
         else:
@@ -105,6 +129,8 @@ def loginaccount(request):
         return HttpResponseRedirect(reverse("tester:login"))
 
 def newquestion(request):
+    if request.session["test_over"] == "n":
         return HttpResponseRedirect(reverse("tester:question", args=(request.session["requested_length"], )))
-
+    else:
+        return HttpResponseRedirect(reverse("tester:testsettings"))
 # Create your views here.
