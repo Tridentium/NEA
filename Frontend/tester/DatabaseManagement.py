@@ -94,7 +94,7 @@ def returnUserID(user_name):
       )   
 
     mycursor = mydb.cursor()
-    mycursor.execute(f"""SELECT user_class FROM Student WHERE user_name = '{user_name}'""")
+    mycursor.execute(f"""SELECT id FROM Student WHERE user_name = '{user_name}'""")
     return mycursor.fetchall()[0][0]
 
 def createQuestion(molecule_name, question_datetime, user_id, outcome):
