@@ -4,11 +4,12 @@ from django.template import loader
 import tester.NEAConceptsTestt as MoleculeGenerator
 import tester.SVGtest as SVGGenerator
 import tester.DatabaseManagement as models
+import tester.utils as utils
 from django.urls import reverse
 import django.utils.timezone as time
 import time as systime
 import datetime
-
+import re
 
 def index(request):
     return render(request, "tester/index.html", {})
@@ -101,14 +102,23 @@ def answer(request):
 
 def registeraccount(request):
     if request.POST["Email"] == request.POST["ConfirmEmail"] and request.POST["Password"] == request.POST["ConfirmPassword"]:
-        models.createUser(request.POST["Username"], 
-                          request.POST["Password"], 
-                          request.POST["Firstname"], 
-                          request.POST["Lastname"],
-                          request.POST["Email"],
-                          request.POST["Class"])
-        request.session["ErrorMessage"] = ""
-        return HttpResponseRedirect(reverse("tester:login"))
+        if utils.validateEmail(request.POST["Email"]):
+            pwrd = request.POST["Password"]
+            if any(i.isdigit() for i in pwrd) and any(i == i.lower() and not i.isdigit() for i in pwrd) and any(i == i.upper() and not i.isdigit() for i in pwrd):
+                models.createUser(request.POST["Username"], 
+                                request.POST["Password"], 
+                                request.POST["Firstname"], 
+                                request.POST["Lastname"],
+                                request.POST["Email"],
+                                request.POST["Class"])
+                request.session["ErrorMessage"] = ""
+                return HttpResponseRedirect(reverse("tester:login"))
+            else:
+                request.session["ErrorMessage"] = "Password must contain a digit, uppercase and lowercase letter"
+                return HttpResponseRedirect(reverse("tester:register"))
+        else:
+            request.session["ErrorMessage"] = "Invalid Email"
+            return HttpResponseRedirect(reverse("tester:register"))
     elif request.POST["Email"] == request.POST["ConfirmEmail"]:
         request.session["ErrorMessage"] = "Passwords Do Not Match"
         return HttpResponseRedirect(reverse("tester:register"))
