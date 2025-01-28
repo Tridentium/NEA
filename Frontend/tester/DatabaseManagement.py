@@ -111,7 +111,6 @@ def createQuestion(molecule_name, question_datetime, user_id, outcome):
                      VALUES('{molecule_name}', '{question_datetime}', '{user_id}', '{outcome}');""")
     mydb.commit()
 
-
 def getQuestionsAnsweredByUser(user_name):
   mydb = mysql.connector.connect(
     host="localhost",
@@ -121,4 +120,18 @@ def getQuestionsAnsweredByUser(user_name):
     )   
 
   mycursor = mydb.cursor()
-  mycursor.execute(f"""SELECT Question.molecule_name FROM Question, Student WHERE Question.user_id = Student.id AND Student.user_name = {user_name}""")
+  mycursor.execute(f"""SELECT Question.molecule_name, Question.outcome FROM Question, Student WHERE Question.user_id = Student.id AND Student.user_name = '{user_name}'""")
+  return mycursor.fetchall()
+
+def getStudentsByClass(user_class):
+  mydb = mysql.connector.connect(
+    host="localhost",
+    user="Admin",
+    password="Perfectnova123!",
+    database = "testerdb"
+    )   
+
+  mycursor = mydb.cursor()
+  mycursor.execute(f"""SELECT user_name FROM Student WHERE user_class= '{user_class}'""")
+  return mycursor.fetchall()
+print(getStudentsByClass("Class1"))

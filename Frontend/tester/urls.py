@@ -15,6 +15,8 @@ urlpatterns = [
     path("registeraccount/", views.registeraccount, name="registeraccount"),
     path("loginaccount/", views.loginaccount, name="loginaccount"),
     path("newquestion/", views.newquestion, name="newquestion"),
+    path("getstudentdatafromstudenname/", views.getstudentdatafromstudenname, name="getstudentdatafromstudenname"),
+    path("getstudentsinclass/", views.getstudentsinclass, name="getstudentsinclass"),
     path("test/question/<int:selected_length>/", views.question, name="question"),
     path("test/answer/", views.answer, name="answer"),
 ]

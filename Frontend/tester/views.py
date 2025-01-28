@@ -36,7 +36,21 @@ def profile(request):
     return render(request, "tester/profile.html", context)
 
 def studentdata(request):
-    return render(request, "tester/studentdata.html", {})
+    try:
+        studentnames = str(request.session["studentnames"]).replace("'", "")
+        studentnames = studentnames.replace("[", "")
+        studentnames = studentnames.replace("]", "")
+        context = {"studentnames": studentnames}
+        try:
+            requestedstudentdata = str(request.session["requestedstudentdata"]).replace("'", "")
+            requestedstudentdata = requestedstudentdata.replace("[", "")
+            requestedstudentdata = requestedstudentdata.replace("]", "")
+            context["requestedstudentdata"] = requestedstudentdata
+        except:
+            pass
+    except:
+        context = {}
+    return render(request, "tester/studentdata.html", context)
 
 def testsettings(request):
     return render(request, "tester/testsettings.html", {})
@@ -143,4 +157,16 @@ def newquestion(request):
         return HttpResponseRedirect(reverse("tester:question", args=(request.session["requested_length"], )))
     else:
         return HttpResponseRedirect(reverse("tester:testsettings"))
+    
+def getstudentsinclass(request):
+    unformattednames = models.getStudentsByClass(request.POST["ClassInput"])
+    formattednames = []
+    for i in unformattednames:
+        formattednames.append(i[0])
+    request.session["studentnames"] = formattednames
+    return HttpResponseRedirect(reverse("tester:studentdata"))
+
+def getstudentdatafromstudenname(request):
+    request.session["requestedstudentdata"] = models.getQuestionsAnsweredByUser(request.POST["studentname"])
+    return HttpResponseRedirect(reverse("tester:studentdata"))
 # Create your views here.
