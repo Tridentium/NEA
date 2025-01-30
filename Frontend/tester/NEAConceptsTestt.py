@@ -5,7 +5,7 @@ import tester.FunctionalGroups as fg
 
 # List of IUPAC main prefixes
 IUPACLengthStems = ["meth", "eth", "prop", "but", "pent", "hex", "hept", "oct", "non", "dec"]
-
+IUPACRepetitionPrefixes = ["", "", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
 
 class Molecule():
     
@@ -25,7 +25,7 @@ class Molecule():
     def generate(self):
         
         # Define the number of carbons in the molecule
-        self.length = random.randint(3, self.maxLength)
+        self.length = random.randint(1, self.maxLength)
         
         # Determine whether the functional group will be at the end of the molecule
         funcEndChance = random.randint(1, 1)
@@ -87,9 +87,9 @@ class Molecule():
             
             # Adding value to naming algorithm
             if not str(index) in self.addedGroups:
-                self.addedGroups[str(index)] = ["Chloro"]
+                self.addedGroups[str(index)] = ["chloro"]
             else:
-                self.addedGroups[str(index)].append("Chloro")
+                self.addedGroups[str(index)].append("chloro")
             
             # Creating Chlorine atom
             chlorine = atom.Chlorine()
@@ -100,9 +100,9 @@ class Molecule():
             
             # Adding value to naming algorithm
             if not str(index) in self.addedGroups:
-                self.addedGroups[str(index)] = ["Bromo"]
+                self.addedGroups[str(index)] = ["bromo"]
             else:
-                self.addedGroups[str(index)].append("Bromo")
+                self.addedGroups[str(index)].append("bromo")
             
             # Creating Bromine atom
             bromine = atom.Bromine()
@@ -110,7 +110,7 @@ class Molecule():
     
     
     def addFunctionalGroup(self, carbon, funcEndBool):
-        
+        print(self.validGroups)
         # Check whether the functional group will be at the end of the atom
         if funcEndBool:
             
@@ -127,19 +127,19 @@ class Molecule():
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 40 and "alcohol" in self.validGroups:
+            elif diceRoll <= 40 and "aldehyde" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
-                functionalGroup = fg.EndAlcohol()
+                functionalGroup = fg.Aldehyde()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 60 and "alcohol" in self.validGroups:
+            elif diceRoll <= 60 and "carboxylicacid" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
-                functionalGroup = fg.EndAlcohol()
+                functionalGroup = fg.CarboxylicAcid()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
                 return functionalGroup.name
@@ -170,7 +170,7 @@ class Molecule():
             diceRoll = random.randint(0, 100)
             
             # 25% chance that the molecule will be an Alkane
-            if diceRoll <= 25 and "alkane" in self.validGroups:
+            if diceRoll <= 20 and "alkane" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alkane()
@@ -179,7 +179,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 25% chance that the molecule will be an Amine
-            elif diceRoll <= 50 and "amine" in self.validGroups:
+            elif diceRoll <= 40 and "amine" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Amine()
@@ -188,7 +188,7 @@ class Molecule():
                 return functionalGroup.name
             
             # 25% chance that the molecule will be an Alcohol
-            elif diceRoll <= 75 and "alcohol" in self.validGroups:
+            elif diceRoll <= 60 and "alcohol" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alcohol()
@@ -197,16 +197,24 @@ class Molecule():
                 return functionalGroup.name
             
             # 25% chance that the molecule will be an Alcohol
-            elif diceRoll <= 100 and "alcohol" in self.validGroups:
+            elif diceRoll <= 80 and "alkene" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
-                functionalGroup = fg.Alcohol()
+                functionalGroup = fg.Alkene()
+                functionalGroup.addFunctionalGroup(carbon)
+                self.stem = functionalGroup.stem
+                return functionalGroup.name
+                        # 25% chance that the molecule will be an Alcohol
+            elif diceRoll <= 100 and "ketone" in self.validGroups:
+                
+                # Instantiates functional group and updates molecule variables
+                functionalGroup = fg.Ketone()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
                 return functionalGroup.name
             else:
                 return self.addFunctionalGroup(carbon, funcEndBool)
-
+            
 
     def outputMolecule(self):
          
@@ -215,8 +223,8 @@ class Molecule():
         
         # Define dictionary for adding prefix groups
         addedGroupsDict = {
-                            "Bromo": [],
-                            "Chloro": []
+                            "bromo": [],
+                            "chloro": []
                             }
         
         # Loop through added prefix groups on each carbon add them and their positions to the dictionary 
@@ -224,27 +232,46 @@ class Molecule():
             for i in y:
                 addedGroupsDict[i].append(str(int(x) + 1))
         
+        FlipValues = False
+        
         # Minimise the value of the functional group position via rotation
-        if self.functionGroupPos + 1 > self.length // 2:
-           self.functionGroupPos = self.length - self.functionGroupPos - 1
-           
-           tempBromo = []
-           tempChloro = []
-           for i in addedGroupsDict["Chloro"]:
-               tempChloro.append(str(self.length - int(i) + 1))
-           for i in addedGroupsDict["Bromo"]:
-               tempBromo.append(str(self.length - int(i) + 1))
-           tempBromo.sort()
-           tempChloro.sort()
-           addedGroupsDict["Bromo"] = tempBromo
-           addedGroupsDict["Chloro"] = tempChloro
+        if self.functionGroupPos + 1 > self.length // 2 and self.functionalGroupName != "Alkane":
+            FlipValues = True
+        elif (self.functionGroupPos % 2 == 1 and self.functionGroupPos//2 == self.length) or self.functionalGroupName == "Alkane":
+            addedGroupsKeys = addedGroupsDict.keys()
+            for i in addedGroupsKeys:
+                if addedGroupsDict[i]:
+                    addedGroupsDict[i].sort(reverse=True)
+                    tempAddedGroupsDict = addedGroupsDict[i]
+                    addedGroupsDict[i].sort()
+                if self.length - int(tempAddedGroupsDict[0]) + 1 < int(addedGroupsDict["bromo"][0]):
+                    FlipValues = True
+                else:
+                    break
+        
+        
+        # Flip the number values if necessary
+        if FlipValues:
+            self.functionGroupPos = self.length - self.functionGroupPos - 1
+            
+            tempBromo = []
+            tempChloro = []
+            for i in addedGroupsDict["chloro"]:
+                tempChloro.append(str(self.length - int(i) + 1))
+            for i in addedGroupsDict["bromo"]:
+                tempBromo.append(str(self.length - int(i) + 1))
+            tempBromo.sort()
+            tempChloro.sort()
+            addedGroupsDict["bromo"] = tempBromo
+            addedGroupsDict["chloro"] = tempChloro
+        
         
         # Loop through the items in addedGroupsDict
         for x, y in addedGroupsDict.items():
             
             # Check there are values in the dictionary
             if len(y) >= 1:
-                
+                instancecount = 0
                 # If only one value present, just add it to the name
                 if len(y) == 1:
                     name += y[0]
@@ -253,9 +280,10 @@ class Molecule():
                 else:
                     for i in y:
                         name += i
+                        instancecount += 1
                         name += ","
                     name = name[:-1]    
-                name += "-" + x + "-"
+                name += "-" + IUPACRepetitionPrefixes[instancecount] + x + "-"
                 
         # Remove the last , or - to allow it to combine with the main stem
         if len(name) > 0:
@@ -264,7 +292,14 @@ class Molecule():
         # No functional group name needed for an alkane
         if self.funcEndBool or self.functionalGroupName == "Alkane":
             name += IUPACLengthStems[self.length - 1] + self.stem
-        
+        elif self.functionalGroupName == "Alkene":
+            if self.length <= 3:
+                name += IUPACLengthStems[self.length - 1] + self.stem
+            else:
+                if FlipValues:
+                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos) + "-" + str(self.stem)
+                else:
+                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos) + "-" + str(self.stem)
         # Add functional group name, position and main length stem to name
         else:
             name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)

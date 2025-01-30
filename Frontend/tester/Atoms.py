@@ -2,6 +2,12 @@ class Atom():
     def __init__(self):
         self.element = None
 
+class DoubleBond():
+    def __init__(self):
+        super().__init__()
+        self.element = "N/A"
+        self.symbol = "N/A"
+
 class Hydrogen(Atom):
     def __init__(self):
         super().__init__()
@@ -37,6 +43,12 @@ class Oxygen(Atom):
         super().__init__()
         self.element = "Oxygen"
         self.symbol = "O"
+        
+class OxygenDouble(Atom):
+    def __init__(self):
+        super().__init__()
+        self.element = "N/A"
+        self.symbol = "ODB"
 
 class BondableAtom(Atom):
     
