@@ -20,6 +20,8 @@ class Molecule():
         self.functionGroupPos = 0
         self.addedGroups = {}
         self.validGroups = valid_groups
+        self.centralGroups = ["alkane", "amine", "alcohol", "alkene", "ketone"]
+        self.endGroups = ["alcohol", "aldehyde", "carboxylicacid", "amide", "alcohol"]
     
     # Generate an instance of a molecule
     def generate(self):
@@ -28,28 +30,39 @@ class Molecule():
         self.length = random.randint(1, self.maxLength)
         
         # Determine whether the functional group will be at the end of the molecule
-        funcEndChance = random.randint(1, 1)
+        funcEndChance = random.randint(1, 3)
         self.funcEndBool = False
         
-        
         if funcEndChance >= 3:
+            self.funcEndBool = True
+        
+        # Check whether only end or central groups selected
+        if self.funcEndBool:
             
-            # Choose the location of the end functional group
+            funcEndBoolNotValid = True
+            for i in self.validGroups:
+                if i in self.endGroups:
+                    funcEndBoolNotValid = False
+            
+            if funcEndBoolNotValid:
+                self.funcEndBool = False
+        else:
+            
+            funcEndBoolNotValid = True
+            for i in self.validGroups:
+                if i in self.centralGroups:
+                    funcEndBoolNotValid = False
+            
+            if funcEndBoolNotValid:
+                self.funcEndBool = True
+        
+        if self.funcEndBool:
             self.functionGroupPos = random.randint(0, 1)
             if self.functionGroupPos == 1:
                 self.functionGroupPos = self.length - 1
-            self.funcEndBool = True
         else:
+            self.functionGroupPos = random.randint(1, self.length-2)
             
-            # Choose the location of the central functional group
-            if self.length > 2:
-                self.functionGroupPos = random.randint(1, self.length-2)
-            else:
-                self.functionGroupPos = random.randint(0, 1)
-                if self.functionGroupPos == 1:
-                    self.functionGroupPos = self.length - 1
-                self.funcEndBool = True
-        
         for i in range(self.length):
             
             if i != self.functionGroupPos:
@@ -110,7 +123,7 @@ class Molecule():
     
     
     def addFunctionalGroup(self, carbon, funcEndBool):
-        print(self.validGroups)
+        
         # Check whether the functional group will be at the end of the atom
         if funcEndBool:
             

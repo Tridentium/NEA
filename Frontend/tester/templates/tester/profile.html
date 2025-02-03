@@ -10,10 +10,9 @@
   <body>
     <h1>Profile Page</h1>
     <h2>Test page:</h2>
-    <div>
+    <div id = "links">
     <a href = "{% url 'tester:index' %}">Index</a>
     <a href = "{% url 'tester:login' %}">Login</a>
-    <a href = "{% url 'tester:studentdata' %}">Student Data (only visible to verified teachers)</a>
     </div>
     <div>
     <hr>
@@ -26,5 +25,14 @@
     <hr>
     </vr>
     </div>
+
+    <script>
+        if ("{{ teacherclass }}" != ""){
+          const datalink = document.createElement("a");
+          datalink.href = "{% url 'tester:studentdata' %}";
+          datalink.textContent = "Class Data: {{ teacherclass }}";
+          document.getElementById("links").appendChild(datalink);
+        }
+    </script>
   </body>
 </html>

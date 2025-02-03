@@ -32,10 +32,22 @@ def register(request):
 
 def profile(request):
     user_name = request.session["current_user"]
-    context = {"user_name" : user_name, "email" : models.returnUserEmail(user_name), "class" : models.returnUserClass(user_name)}
+    if models.returnUserTeacherStatus(request.session["current_user"]):
+        teacherclass = models.returnUserClass(request.session["current_user"])
+    else:
+        teacherclass = ""
+    context = {"user_name" : user_name, "email" : models.returnUserEmail(user_name), "class" : models.returnUserClass(user_name), "teacherclass": teacherclass}
     return render(request, "tester/profile.html", context)
 
 def studentdata(request):
+    
+    teacherclass = models.returnUserClass(request.session["current_user"])
+    unformattednames = models.getStudentsByClass(teacherclass)
+    formattednames = []
+    for i in unformattednames:
+        formattednames.append(i[0])
+    request.session["studentnames"] = formattednames
+    
     try:
         studentnames = str(request.session["studentnames"]).replace("'", "")
         studentnames = studentnames.replace("[", "")
@@ -124,7 +136,8 @@ def registeraccount(request):
                                 request.POST["Firstname"], 
                                 request.POST["Lastname"],
                                 request.POST["Email"],
-                                request.POST["Class"])
+                                request.POST["Class"],
+                                bool(request.POST["TeacherBool"]),)
                 request.session["ErrorMessage"] = ""
                 return HttpResponseRedirect(reverse("tester:login"))
             else:
@@ -158,13 +171,6 @@ def newquestion(request):
     else:
         return HttpResponseRedirect(reverse("tester:testsettings"))
     
-def getstudentsinclass(request):
-    unformattednames = models.getStudentsByClass(request.POST["ClassInput"])
-    formattednames = []
-    for i in unformattednames:
-        formattednames.append(i[0])
-    request.session["studentnames"] = formattednames
-    return HttpResponseRedirect(reverse("tester:studentdata"))
 
 def getstudentdatafromstudenname(request):
     request.session["requestedstudentdata"] = models.getQuestionsAnsweredByUser(request.POST["studentname"])

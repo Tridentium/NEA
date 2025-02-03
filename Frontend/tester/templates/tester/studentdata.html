@@ -15,22 +15,7 @@
     <a href = "{% url 'tester:login' %}">Login</a>
     </div>
     <div id = "classinputform">
-    <form action="{% url 'tester:getstudentsinclass' %}" method="post">
 
-      {% csrf_token %}
-
-      <br><br><br>
-      <fieldset>
-
-      <!-- Create Answer Input -->
-      <input type="text" name="ClassInput" placeholder="Enter Class">
-      <br><br>
-      <!-- Create Submit Entry Button -->
-      <div>
-      <br><br>
-      <input type="submit" value="Submit">
-      </div>
-    </form>
     </div>
 
     <div id = "studentnamesform">
@@ -72,11 +57,12 @@
           else if (questionresultsarray[index] == "1"){
             questionresultsarray[index] = "Correct";
           }
-        }
+        } 
         for (let index = 0; index < questionresultsarray.length; index = index + 2) {
           const newListItem = document.createElement('li');
           newListItem.textContent = questionresultsarray[index + 1] + ": " + questionresultsarray[index];
           document.getElementById("outputlist").appendChild(newListItem);
+
         }
          
       }

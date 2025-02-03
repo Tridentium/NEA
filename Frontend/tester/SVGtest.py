@@ -10,13 +10,15 @@ def createSVG(length, molecule):
     numberofCs = length
     
     # Define SVG dimensions
-    resolutionX = calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 2, 0)
+    resolutionX = calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 3, 0)
     resolutionY = calculateDistance(2, 4, 4, 0)
 
     # Create SVG
     svg_document = svgwrite.Drawing(filename = "./tester/test-svgwrite.svg",
                                     size = (str(resolutionX) + "px", str(resolutionY) + "px"))
 
+    
+    doubleletter = False
     
     # Define container for the bond lines
     hlines = svg_document.add(svg_document.g(id='hlines', stroke='black'))
@@ -41,18 +43,24 @@ def createSVG(length, molecule):
         # Check if first atom in molecule
         if i == 1:
             # Add first symbol to carbon
-            svg_document.add(svg_document.text(symbols[symNum][::-1],
+            if symbols[symNum] == symbols[symNum].upper() and symbols[symNum][::-1] != symbols[symNum]:
+                initialtext = symbols[symNum][::-1]
+                doubleletter = True
+            else:
+                initialtext = symbols[symNum]
+                doubleletter = False
+            svg_document.add(svg_document.text(initialtext,
                                             
             # Define x and y values of its position
-            x = (0, ), 
+            x = (calculateDistance(0, 0, 0, 0), ), 
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial",))
             
             # Add first bond line
             hlines.add(svg_document.line(
                 
             # Define x and y values of its start and end
-            start=(calculateDistance(0, 1, 1, 0), calculateDistance(1, 2, 2, 1)), 
-            end=(calculateDistance(1, 1, 1, 0), calculateDistance(1, 2, 2, 1))))
+            start=(calculateDistance(0, 1, 1, 0, doubleletter), calculateDistance(1, 2, 2, 1)), 
+            end=(calculateDistance(1, 1, 1, 0, doubleletter), calculateDistance(1, 2, 2, 1))))
 
             # Increase the symbol count
             symNum += 1
@@ -61,22 +69,22 @@ def createSVG(length, molecule):
                 oxygendoublebond = True
                 hlines.add(svg_document.line(
                             start=(
-                                calculateDistance(i, (i) * 2, i, -0.5), 
+                                calculateDistance(i, (i) * 2, i, -0.5, doubleletter), 
                                 calculateDistance(0, 1, 1, 0)), 
                             end=(
-                                calculateDistance(i, (i) * 2, i, -0.5), 
+                                calculateDistance(i, (i) * 2, i, -0.5, doubleletter), 
                                 calculateDistance(1, 1, 1, 0))))
             else: 
                 # Add the next symbol
                 svg_document.add(svg_document.text(symbols[symNum],
-                x = (calculateDistance(i, (i) * 2, i, 0), ), 
+                x = (calculateDistance(i, (i) * 2, i, 0, doubleletter), ), 
                 y = (calculateDistance(2, 4, 3, 0), ), style = "font-size:20px; font-family:Arial"))
             
             # Add the carbon symbol
             svg_document.add(svg_document.text("C",
 
             # Define its x and y position
-            x = (calculateDistance(1, 2, 1, 0), ), 
+            x = (calculateDistance(1, 2, 1, 0, doubleletter), ), 
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count
@@ -86,33 +94,33 @@ def createSVG(length, molecule):
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its x and y position
-            x = (calculateDistance(1, 2, 1, 0), ), 
+            x = (calculateDistance(1, 2, 1, 0, doubleletter), ), 
             y = (calculateDistance(0, 0, 1, 0), ), style = "font-size:20px; font-family:Arial"))
             
             # Add the two remaining bond lines 
             if not oxygendoublebond:
                 hlines.add(svg_document.line(
                     start=(
-                        calculateDistance(1, 2, 1, -1), 
+                        calculateDistance(1, 2, 1, -1, doubleletter), 
                         calculateDistance(0, 1, 1, 0)), 
                     end=(
-                        calculateDistance(1, 2, 1, -1), 
+                        calculateDistance(1, 2, 1, -1, doubleletter), 
                         calculateDistance(1, 1, 1, 0))))
             else:
                 hlines.add(svg_document.line(
                     start=(
-                        calculateDistance(1, 2, 1, -1.5), 
+                        calculateDistance(1, 2, 1, -1.5, doubleletter), 
                         calculateDistance(0, 1, 1, 0)), 
                     end=(
-                        calculateDistance(1, 2, 1, -1.5), 
+                        calculateDistance(1, 2, 1, -1.5, doubleletter), 
                         calculateDistance(1, 1, 1, 0))))
             if not oxygendoublebond:
                 hlines.add(svg_document.line(
                                             start=(
-                                                calculateDistance(i, (i) * 2, i, -1), 
+                                                calculateDistance(i, (i) * 2, i, -1, doubleletter), 
                                                 calculateDistance(1, 3, 2, 0)), 
                                             end=(
-                                                calculateDistance(i, (i) * 2, i, -1), 
+                                                calculateDistance(i, (i) * 2, i, -1, doubleletter), 
                                                 calculateDistance(2, 3, 2, 0))))
             
  
@@ -123,14 +131,14 @@ def createSVG(length, molecule):
                 svg_document.add(svg_document.text(symbols[symNum],
                                                 
                 # Define its X and Y position
-                x = (calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, 0), ), 
+                x = (calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, 0, doubleletter), ), 
                 y = (calculateDistance(0, 0, 1, 0), ), style = "font-size:20px; font-family:Arial"))
             else:
                 # Add first symbol
                 svg_document.add(svg_document.text(symbols[symNum + 2],
                                                 
                 # Define its X and Y position
-                x = (calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, 0), ), 
+                x = (calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, 0, doubleletter), ), 
                 y = (calculateDistance(0, 0, 1, 0), ), style = "font-size:20px; font-family:Arial"))
             
             # Increment the symbol count to access the next symbol
@@ -138,75 +146,75 @@ def createSVG(length, molecule):
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
-            x = (calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, 0), ),
+            x = (calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, 0, doubleletter), ),
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
             
             if symbols[symNum] == "ODB":
                 oxygendoublebond = True
                 hlines.add(svg_document.line(
                             start=(
-                                calculateDistance(i, (i) * 2, i, -0.5), 
+                                calculateDistance(i, (i) * 2, i, -0.5, doubleletter), 
                                 calculateDistance(0, 1, 1, 0)), 
                             end=(
-                                calculateDistance(i, (i) * 2, i, -0.5), 
+                                calculateDistance(i, (i) * 2, i, -0.5, doubleletter), 
                                 calculateDistance(1, 1, 1, 0))))
             else: 
                 # Add the next symbol
                 svg_document.add(svg_document.text(symbols[symNum],
-                x = (calculateDistance(i, (i) * 2, i, 0), ), 
+                x = (calculateDistance(i, (i) * 2, i, 0, doubleletter), ), 
                 y = (calculateDistance(2, 4, 3, 0), ), style = "font-size:20px; font-family:Arial"))
             
             # Add the bond lines 
             if not oxygendoublebond:
                 hlines.add(svg_document.line(
                     start=(
-                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1), 
+                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1, doubleletter), 
                             calculateDistance(0, 1, 1, 0)), 
                     end=(
-                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1), 
+                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1, doubleletter), 
                             calculateDistance(1, 1, 1, 0))))
             else:
                 hlines.add(svg_document.line(
                     start=(
-                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1.5), 
+                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1.5, doubleletter), 
                             calculateDistance(0, 1, 1, 0)), 
                     end=(
-                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1.5), 
+                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1.5, doubleletter), 
                             calculateDistance(1, 1, 1, 0))))
             if not oxygendoublebond:
                 hlines.add(svg_document.line(
                     start=(
-                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1), 
+                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1, doubleletter), 
                             calculateDistance(1, 3, 2, 0)), 
                     end=(
-                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1), 
+                            calculateDistance(numberofCs, (numberofCs) * 2, numberofCs, -1, doubleletter), 
                             calculateDistance(2, 3, 2, 0))))
             # Increment the symbol count to access the next symbol
             symNum += 1
             
             # Add the final symbol
             svg_document.add(svg_document.text(symbols[symNum - 2],
-            x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0), ), 
+            x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0, doubleletter), ), 
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
         else:
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
-            x = (calculateDistance(i, (i) * 2, i, 0), ), 
+            x = (calculateDistance(i, (i) * 2, i, 0, doubleletter), ), 
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
             
             if symbols[symNum] == "N/A":
                 alkenepresent = True
                 hlines.add(svg_document.line(start=(
-                                            calculateDistance(i, (i) * 2 + 1, i + 1, 0), 
+                                            calculateDistance(i, (i) * 2 + 1, i + 1, 0, doubleletter), 
                                             calculateDistance(1, 2, 2, 1.5)), 
                                         end=(
-                                            calculateDistance(i + 1, (i) * 2 + 1, i + 1, 0), 
+                                            calculateDistance(i + 1, (i) * 2 + 1, i + 1, 0, doubleletter), 
                                             calculateDistance(1, 2, 2, 1.5))))
             else:
                 # Add the first symbol
                 svg_document.add(svg_document.text(symbols[symNum],
-                x = (calculateDistance(i, (i) * 2, i, 0), ), 
+                x = (calculateDistance(i, (i) * 2, i, 0, doubleletter), ), 
                 y = (calculateDistance(0, 0, 1, 0), ), style = "font-size:20px; font-family:Arial"))
    
             # Increment the symbol count by 1
@@ -217,15 +225,15 @@ def createSVG(length, molecule):
                 oxygendoublebond = True
                 hlines.add(svg_document.line(
                             start=(
-                                calculateDistance(i, (i) * 2, i, -0.5), 
+                                calculateDistance(i, (i) * 2, i, -0.5, doubleletter), 
                                 calculateDistance(0, 1, 1, 0)), 
                             end=(
-                                calculateDistance(i, (i) * 2, i, -0.5), 
+                                calculateDistance(i, (i) * 2, i, -0.5, doubleletter), 
                                 calculateDistance(1, 1, 1, 0))))
             else: 
                 # Add the next symbol
                 svg_document.add(svg_document.text(symbols[symNum],
-                x = (calculateDistance(i, (i) * 2, i, 0), ), 
+                x = (calculateDistance(i, (i) * 2, i, 0, doubleletter), ), 
                 y = (calculateDistance(2, 4, 3, 0), ), style = "font-size:20px; font-family:Arial"))
             
             # Add the bond lines
@@ -233,43 +241,43 @@ def createSVG(length, molecule):
                 if not oxygendoublebond:
                     hlines.add(svg_document.line(
                                                 start=(
-                                                    calculateDistance(i, (i) * 2, i, -1), 
+                                                    calculateDistance(i, (i) * 2, i, -1, doubleletter), 
                                                     calculateDistance(0, 1, 1, 0)), 
                                                 end=(
-                                                    calculateDistance(i, (i) * 2, i, -1), 
+                                                    calculateDistance(i, (i) * 2, i, -1, doubleletter), 
                                                     calculateDistance(1, 1, 1, 0))))
                 else: 
                     hlines.add(svg_document.line(
                                                 start=(
-                                                    calculateDistance(i, (i) * 2, i, -1.5), 
+                                                    calculateDistance(i, (i) * 2, i, -1.5, doubleletter), 
                                                     calculateDistance(0, 1, 1, 0)), 
                                                 end=(
-                                                    calculateDistance(i, (i) * 2, i, -1.5), 
+                                                    calculateDistance(i, (i) * 2, i, -1.5, doubleletter), 
                                                     calculateDistance(1, 1, 1, 0))))
             if not oxygendoublebond:
                 hlines.add(svg_document.line(
                                             start=(
-                                                calculateDistance(i, (i) * 2, i, -1), 
+                                                calculateDistance(i, (i) * 2, i, -1, doubleletter), 
                                                 calculateDistance(1, 3, 2, 0)), 
                                             end=(
-                                                calculateDistance(i, (i) * 2, i, -1), 
+                                                calculateDistance(i, (i) * 2, i, -1, doubleletter), 
                                                 calculateDistance(2, 3, 2, 0))))
             
         if alkenepresent:
             # Add a bond line to the next carbon on the right unless its the last carbon
             hlines.add(svg_document.line(start=(
-                                                calculateDistance(i, (i) * 2 + 1, i + 1, 0), 
+                                                calculateDistance(i, (i) * 2 + 1, i + 1, 0, doubleletter), 
                                                 calculateDistance(1, 2, 2, 0.5)), 
                                             end=(
-                                                calculateDistance(i + 1, (i) * 2 + 1, i + 1, 0), 
+                                                calculateDistance(i + 1, (i) * 2 + 1, i + 1, 0, doubleletter), 
                                                 calculateDistance(1, 2, 2, 0.5))))
         else:
             # Add a bond line to the next carbon on the right unless its the last carbon
             hlines.add(svg_document.line(start=(
-                                                calculateDistance(i, (i) * 2 + 1, i + 1, 0), 
+                                                calculateDistance(i, (i) * 2 + 1, i + 1, 0, doubleletter), 
                                                 calculateDistance(1, 2, 2, 1)), 
                                             end=(
-                                                calculateDistance(i + 1, (i) * 2 + 1, i + 1, 0), 
+                                                calculateDistance(i + 1, (i) * 2 + 1, i + 1, 0, doubleletter), 
                                                 calculateDistance(1, 2, 2, 1))))
     if numberofCs == 1:
             # Increment the symbol count to access the next symbol
@@ -277,20 +285,24 @@ def createSVG(length, molecule):
             
             # Add the final symbol
             svg_document.add(svg_document.text(symbols[symNum],
-            x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0), ), 
+            x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0, doubleletter), ), 
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
 
     # Save the svg
     # svg_document.save()
     return svg_document.tostring()
 
-def calculateDistance(bondLengthCount, bondSpacingCount, characterSpacingCount, lineDifferenceCount = 0):
+def calculateDistance(bondLengthCount, bondSpacingCount, characterSpacingCount, lineDifferenceCount = 0, doubleletter = False):
     bondLength = 20
     bondSpacing = 8
-    characterSpacing = 15
+    characterSpacing = 20
     lineDifference = 7
     
-    return bondLength * bondLengthCount + bondSpacing * bondSpacingCount + characterSpacing * characterSpacingCount - lineDifference * lineDifferenceCount
+    distance = 0
+    if doubleletter:
+        distance += characterSpacing - lineDifference * 1.5
+    
+    return distance + bondLength * bondLengthCount + bondSpacing * bondSpacingCount + characterSpacing * characterSpacingCount - lineDifference * lineDifferenceCount
 
 
 # DEBUG: Generate molecule and render it  
