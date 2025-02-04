@@ -93,18 +93,20 @@ class AcylChloride(FunctionalGroup):
         self.stem = "anoyl chloride"
     
     def addFunctionalGroup(self, carbon):
-        carbon.addBondedAtom(atom.Oxygen())
         carbon.addBondedAtom(atom.Chlorine())
+        carbon.addBondedAtom(atom.OxygenDouble())
+        carbon.addBondedAtom(atom.Oxygen())
         
 class Amide(FunctionalGroup):
     def __init__(self):
         super().__init__()
         self.name = "Amide"
-        self.stem = "amide"
+        self.stem = "anamide"
     
     def addFunctionalGroup(self, carbon):
-        carbon.addBondedAtom(atom.Oxygen())
         carbon.addBondedAtom(atom.AmideGroup())
+        carbon.addBondedAtom(atom.OxygenDouble())
+        carbon.addBondedAtom(atom.Oxygen())
 
 class EndAlcohol(FunctionalGroup):
     def __init__(self):

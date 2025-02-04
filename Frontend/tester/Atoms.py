@@ -36,7 +36,8 @@ class AmideGroup(Atom):
     def __init__(self):
         super().__init__()
         self.element = "Amide"
-        self.symbol = "NH2"
+        self.symbol = "NH₂"
+        
         
 class Oxygen(Atom):
     def __init__(self):

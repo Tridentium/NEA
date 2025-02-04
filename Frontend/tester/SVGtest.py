@@ -42,13 +42,18 @@ def createSVG(length, molecule):
         
         # Check if first atom in molecule
         if i == 1:
+            
             # Add first symbol to carbon
             if symbols[symNum] == symbols[symNum].upper() and symbols[symNum][::-1] != symbols[symNum]:
-                initialtext = symbols[symNum][::-1]
+                if "₂" not in symbols[symNum]:
+                    initialtext = symbols[symNum][::-1]
+                else:
+                    initialtext = symbols[symNum][1] + symbols[symNum][2] + symbols[symNum][0]
                 doubleletter = True
             else:
                 initialtext = symbols[symNum]
                 doubleletter = False
+            
             svg_document.add(svg_document.text(initialtext,
                                             
             # Define x and y values of its position
@@ -197,6 +202,7 @@ def createSVG(length, molecule):
             x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0, doubleletter), ), 
             y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
         else:
+            symNum += 1
             
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",

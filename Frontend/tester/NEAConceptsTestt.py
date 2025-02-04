@@ -21,7 +21,7 @@ class Molecule():
         self.addedGroups = {}
         self.validGroups = valid_groups
         self.centralGroups = ["alkane", "amine", "alcohol", "alkene", "ketone"]
-        self.endGroups = ["alcohol", "aldehyde", "carboxylicacid", "amide", "alcohol"]
+        self.endGroups = ["alcohol", "aldehyde", "carboxylicacid", "amide", "alcohol", "acylchloride"]
     
     # Generate an instance of a molecule
     def generate(self):
@@ -41,6 +41,7 @@ class Molecule():
             
             funcEndBoolNotValid = True
             for i in self.validGroups:
+                print(i)
                 if i in self.endGroups:
                     funcEndBoolNotValid = False
             
@@ -50,6 +51,7 @@ class Molecule():
             
             funcEndBoolNotValid = True
             for i in self.validGroups:
+                print(i)
                 if i in self.centralGroups:
                     funcEndBoolNotValid = False
             
@@ -61,7 +63,10 @@ class Molecule():
             if self.functionGroupPos == 1:
                 self.functionGroupPos = self.length - 1
         else:
-            self.functionGroupPos = random.randint(1, self.length-2)
+            if self.length > 2:
+                self.functionGroupPos = random.randint(1, self.length-2)
+            else:
+                self.functionGroupPos = random.randint(0, 1)
             
         for i in range(self.length):
             
@@ -89,14 +94,14 @@ class Molecule():
         
         # Generates random number to decide which atom/group is to be added to the carbon
         diceRoll = random.randint(0, 100)
-        
+
         # 90% of the time it'll be a Hydrogen
-        if diceRoll <= 90:
+        if diceRoll <= 30:
             hydrogen = atom.Hydrogen()  
             return hydrogen
         
         # 5% of the time it'll be a Chlorine
-        elif diceRoll <= 95:
+        elif diceRoll <= 90:
             
             # Adding value to naming algorithm
             if not str(index) in self.addedGroups:
@@ -167,10 +172,10 @@ class Molecule():
                 return functionalGroup.name
             
             # 20% chance that an Alcohol will be the main functional group of the molecule
-            elif diceRoll <= 100 and "alcohol" in self.validGroups:
+            elif diceRoll <= 100 and "acylchloride" in self.validGroups:
                 
                 # Instantiates functional group and updates molecule variables
-                functionalGroup = fg.EndAlcohol()
+                functionalGroup = fg.AcylChloride()
                 functionalGroup.addFunctionalGroup(carbon)
                 self.stem = functionalGroup.stem
                 return functionalGroup.name
@@ -257,7 +262,7 @@ class Molecule():
                     addedGroupsDict[i].sort(reverse=True)
                     tempAddedGroupsDict = addedGroupsDict[i]
                     addedGroupsDict[i].sort()
-                if self.length - int(tempAddedGroupsDict[0]) + 1 < int(addedGroupsDict["bromo"][0]):
+                if self.length - int(tempAddedGroupsDict[0]) < int(addedGroupsDict["bromo"][0]):
                     FlipValues = True
                 else:
                     break
