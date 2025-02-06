@@ -27,9 +27,11 @@
     <script>
       if (document.getElementById("user_answer").innerHTML.toLowerCase() == document.getElementById("nameForPrinting").innerHTML.toLocaleLowerCase()) {
         document.getElementById("Outcome").innerHTML = "Correct";
+        document.getElementById("Outcome").style = "color: green";
       }
       else{
         document.getElementById("Outcome").innerHTML = "Incorrect";
+        document.getElementById("Outcome").style = "color: red";
       }
     </script>
         <form action="{% url 'tester:newquestion' %}" method="post">
