@@ -8,11 +8,13 @@
     <title>My test page</title>
   </head>
   <body>
+    <br>
     <h1>Login Page</h1>
-    <h2>Links:</h2>
+    <br>
+    
     <div>
-    <a href = "{% url 'tester:index' %}">Index</a>
-    <a href = "{% url 'tester:register' %}">register</a>
+    <a href = "{% url 'tester:index' %}"><button class = "pagenavigation">Homepage</button></a>
+    <a href = "{% url 'tester:register' %}"><button class = "pagenavigation">Register</button></a>
     </div>
 
     <form action="{% url 'tester:loginaccount' %}" method="post">
@@ -20,8 +22,7 @@
       <!-- Implements Django's protections against Cross Site Request Forgeries -->
       {% csrf_token %}
 
-      <br><br><br>
-      <fieldset>
+      <br><br><br><br><br>
       <label>Username: </label>
       <!-- Create Username Input -->
       <input type="text" name="Username" placeholder="Username">

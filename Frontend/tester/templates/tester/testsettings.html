@@ -8,17 +8,20 @@
     <title>My test page</title>
   </head>
   <body>
+    <br>
     <!-- Page title -->
     <h1>Test Settings</h1>
-
+    <br>
+    <div>
+    <a href = "{% url 'tester:index' %}"><button class = "pagenavigation">Homepage</button></a>
+    <a href = "{% url 'tester:login' %}"><button class = "pagenavigation">Login</button></a>
+    </div>
     <!-- Define form -->
     <form action="{% url 'tester:settestsettings' %}" method="post">
 
       <!-- Implements Django's protections against Cross Site Request Forgeries -->
       {% csrf_token %}
 
-      <br><br><br>
-      <fieldset>
       <br><br>
       <!-- Create Molecule Length Slider -->
       <div>
@@ -49,7 +52,7 @@
       </script>
       </div>
 
-      <br><br><br>
+      <br>
       <!-- Create Functional Group Radio Options -->
       <div>
         <h2>Select Desired Functional Groups: </h2>
@@ -85,7 +88,7 @@
         <label>Amide</label>
       </div>
 
-      <br><br><br>
+      <br><br>
       <!-- Create test length slider -->
       <div>
         <input type="range" name="TestLength" id="TestLength" min = "1" max = "50" value = 10 step = 1 list = "length_markers">
@@ -117,7 +120,7 @@
 
       <!-- Create Submit Entry Button -->
       <div>
-      <br><br>
+      <br>
       <input type="submit" value="Submit">
       </div>
     </form>

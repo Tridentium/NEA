@@ -11,8 +11,8 @@
     <h1 id="Outcome">Answer Outcome</h1>
     <h2>Test page:</h2>
     <div>
-    <a href = "{% url 'tester:login' %}">Login</a>
-    <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
+    <a href = "{% url 'tester:login' %}"><button class = "pagenavigation">Login</button></a>
+    <a href = "{% url 'tester:testsettings' %}"><button class = "pagenavigation">New Test</button></a>
     </div>
     <div>
     <h2>Actual answer:</h2>
@@ -34,7 +34,6 @@
     </script>
         <form action="{% url 'tester:newquestion' %}" method="post">
           {% csrf_token %}
-          <fieldset>
           <br><br>
           <input type="submit" value= "{{ button_text }}" >
           </div>

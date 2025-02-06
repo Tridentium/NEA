@@ -8,8 +8,13 @@
     <title>My test page</title>
   </head>
   <body>
+
+    
+    <br>
     <h1>Profile</h1>
     <br>
+
+
     <div id = "links">
       <a href = "{% url 'tester:index' %}"><button class = "pagenavigation">Homepage</button></a>
       <a href = "{% url 'tester:login' %}"><button class = "pagenavigation">Login</button></a>
@@ -36,7 +41,7 @@
           datalink.id = "createdlink"
           const databutton = document.createElement("button");
           databutton.textContent = "Class Data: {{ teacherclass }}";
-          databutton.class = "pagenavigation";
+          databutton.className = "pagenavigation";
           document.getElementById("links").appendChild(datalink);
           document.getElementById("createdlink").appendChild(databutton)
         }

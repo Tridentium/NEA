@@ -7,17 +7,16 @@
     <title>My test page</title>
   </head>
   <body>
-    <h1>Question Page</h1>
-    <h2>Links:</h2>
+    <br>
+    <h1>Question {{ currentQuestionNo }}</h1>
     <div>
-    <a href = "{% url 'tester:answer' %}">Answer</a>
     <br>
-    <a href = "{% url 'tester:login' %}">Login</a>
-    <br>
-    <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
+    <a href = "{% url 'tester:login' %}"><button class = "pagenavigation">Login</button></a>
+    <a href = "{% url 'tester:testsettings' %}"><button class = "pagenavigation">New Test</button></a>
     <br><br><br><br>
-    <div>{{ image|safe }}</div>
-    <br><br><br>  
+    
+    <div id = "svg">{{ image|safe }}</div>
+    <br> 
     <!-- <strong> {{ molecule_name }} </strong> -->
     </div>
     
@@ -28,8 +27,6 @@
       {% csrf_token %}
 
       <br><br><br>
-      <fieldset>
-
       <!-- Create Answer Input -->
       <input type="text" name="Answer" placeholder="Answer">
       <br><br>

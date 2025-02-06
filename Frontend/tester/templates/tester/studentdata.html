@@ -8,14 +8,12 @@
     <title>My test page</title>
   </head>
   <body>
-    <h1>Student Data Page</h1>
-    <h2>Test page:</h2>
+    <br>
+    <h1 id = "a">Student Data</h1>
+    <br>
     <div>
-    <a href = "{% url 'tester:index' %}">Index</a>
-    <a href = "{% url 'tester:login' %}">Login</a>
-    </div>
-    <div id = "classinputform">
-
+    <a href = "{% url 'tester:index' %}"><button class = "pagenavigation">Homepage</button></a>
+    <a href = "{% url 'tester:login' %}"><button class = "pagenavigation">Login</button></a>
     </div>
 
     <div id = "studentnamesform">
@@ -25,7 +23,6 @@
       {% csrf_token %}
 
       <br><br><br>
-      <fieldset>
       <div id = "studentnamebuttons">
 
 
@@ -48,7 +45,8 @@
           newButton.name = "studentname";
           document.getElementById("studentnamebuttons").appendChild(newButton);
         }
-
+      }
+      if ("{{ requestedstudentdata }}"){
         questionresultsarray = "{{ requestedstudentdata }}".split(", ");
         for (let index = 0; index < questionresultsarray.length; index++) {
           if (questionresultsarray[index] == "0"){
@@ -64,10 +62,11 @@
           document.getElementById("outputlist").appendChild(newListItem);
 
         }
-         
       }
       else {
-        // document.getElementById("studentnamesform").remove()
+          const errortext = document.createElement('p');
+          errortext.textContent = "No questions answered by selected user";
+          document.getElementById("outputlist").appendChild(errortext);
       }
     </script>
   </body>

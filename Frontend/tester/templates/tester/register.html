@@ -8,18 +8,17 @@
     <title>My test page</title>
   </head>
   <body>
+    <br>
     <h1>Register Page</h1>
-    <h2>Links:</h2>
     <div>
-    <a href = "{% url 'tester:login' %}">Login</a>
+    <a href = "{% url 'tester:login' %}"><button class = "pagenavigation">Login</button></a>
     </div>
     <form action="{% url 'tester:registeraccount' %}" method="post">
 
       <!-- Implements Django's protections against Cross Site Request Forgeries -->
       {% csrf_token %}
 
-      <br><br>
-      <fieldset>
+      <br>
   
       
       <!-- Create First Name Input -->
@@ -71,7 +70,6 @@
       <div>
 
       <p id = "ErrorMessage" class = "error">{{ ErrorMessage }}</p>
-      <br>
       <input type="submit" value="Register">
       </div>
     </form>

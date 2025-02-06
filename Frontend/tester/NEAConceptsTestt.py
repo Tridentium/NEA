@@ -23,7 +23,7 @@ class Molecule():
         self.centralGroups = ["alkane", "amine", "alcohol", "alkene", "ketone"]
         
         # Methane?
-        self.endGroups = ["alcohol", "aldehyde", "carboxylicacid", "amide", "acylchloride"]
+        self.endGroups = ["endalcohol", "aldehyde", "carboxylicacid", "amide", "acylchloride"]
     
     # Generate an instance of a molecule
     def generate(self):
