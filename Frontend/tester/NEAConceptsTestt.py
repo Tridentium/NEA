@@ -1,6 +1,7 @@
 import random
 import tester.Atoms as atom
 import tester.FunctionalGroups as fg
+import math
 
 
 # List of IUPAC main prefixes
@@ -267,10 +268,11 @@ class Molecule():
         FlipValues = False
         
         # Minimise the value of the functional group position via rotation
-        if self.functionGroupPos + 1 > self.length // 2 and self.functionalGroupName != "Alkane":
+        if self.functionGroupPos + 1 > math.ceil(self.length / 2) and self.functionalGroupName != "Alkane":
             FlipValues = True
-        elif (self.functionGroupPos % 2 == 1 and self.functionGroupPos//2 == self.length) or self.functionalGroupName == "Alkane":
+        elif (self.length % 2 == 1 and self.length//2 == self.functionGroupPos) or self.functionalGroupName == "Alkane":
             addedGroupsKeys = addedGroupsDict.keys()
+            print("keyskeysleys")
             for i in addedGroupsKeys:
                 if addedGroupsDict[i]:
                     addedGroupsDict[i].sort(reverse=True)

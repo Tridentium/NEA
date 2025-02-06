@@ -81,10 +81,6 @@ def settestsettings(request):
 
 def question(request, selected_length):
     
-    
-    if request.session["questions_completed"] == 0:
-        request.session["questions_completed"] = 1
-    
     currentQuestionNo = request.session["questions_completed"]
     
     valid_groups = request.session['list']
@@ -102,7 +98,7 @@ def question(request, selected_length):
         request.session['molecule_name'] = nameForPrinting
         request.session['image'] = svg
         
-        context = {"molecule_name" : nameForPrinting, "image" : svg, "currentQuestionNo": currentQuestionNo}
+        context = {"molecule_name" : nameForPrinting, "image" : svg, "currentQuestionNo": currentQuestionNo + 1}
         
         return render(request, "tester/question.html", context)
 
