@@ -21,13 +21,12 @@ class Molecule():
         self.addedGroups = {}
         self.validGroups = valid_groups
         self.centralGroups = ["alkane", "amine", "alcohol", "alkene", "ketone"]
-        self.endGroups = ["alcohol", "aldehyde", "carboxylicacid", "amide", "alcohol", "acylchloride"]
+        
+        # Methane?
+        self.endGroups = ["alcohol", "aldehyde", "carboxylicacid", "amide", "acylchloride"]
     
     # Generate an instance of a molecule
     def generate(self):
-        
-        # Define the number of carbons in the molecule
-        self.length = random.randint(1, self.maxLength)
         
         # Determine whether the functional group will be at the end of the molecule
         funcEndChance = random.randint(1, 3)
@@ -35,13 +34,12 @@ class Molecule():
         
         if funcEndChance >= 3:
             self.funcEndBool = True
-        
+
         # Check whether only end or central groups selected
         if self.funcEndBool:
             
             funcEndBoolNotValid = True
             for i in self.validGroups:
-                print(i)
                 if i in self.endGroups:
                     funcEndBoolNotValid = False
             
@@ -51,23 +49,39 @@ class Molecule():
             
             funcEndBoolNotValid = True
             for i in self.validGroups:
-                print(i)
                 if i in self.centralGroups:
                     funcEndBoolNotValid = False
             
             if funcEndBoolNotValid:
                 self.funcEndBool = True
         
+        if self.maxLength == 2 and self.funcEndBool == False:
+            return "That combination of lengths and functional groups is invalid"
+        
+        if not self.validGroups:
+            return "You must select at least one functional group"
+        
+        self.length = random.randint(1, self.maxLength - 1)
+        
         if self.funcEndBool:
             self.functionGroupPos = random.randint(0, 1)
             if self.functionGroupPos == 1:
                 self.functionGroupPos = self.length - 1
         else:
-            if self.length > 2:
-                self.functionGroupPos = random.randint(1, self.length-2)
+            self.length = random.randint(3, self.maxLength)
+            if self.length == 3:
+                self.functionGroupPos = 1
             else:
-                self.functionGroupPos = random.randint(0, 1)
-            
+                self.functionGroupPos = random.randint(1, self.length - 2)
+
+        print("----------------___-------------")
+        print(self.length)
+        print(self.validGroups)
+        print(self.funcEndBool)
+        print(self.functionGroupPos)
+        print("-------------------")
+        
+        
         for i in range(self.length):
             
             if i != self.functionGroupPos:
@@ -96,12 +110,12 @@ class Molecule():
         diceRoll = random.randint(0, 100)
 
         # 90% of the time it'll be a Hydrogen
-        if diceRoll <= 30:
+        if diceRoll <= 90:
             hydrogen = atom.Hydrogen()  
             return hydrogen
         
         # 5% of the time it'll be a Chlorine
-        elif diceRoll <= 90:
+        elif diceRoll <= 95:
             
             # Adding value to naming algorithm
             if not str(index) in self.addedGroups:
@@ -262,10 +276,14 @@ class Molecule():
                     addedGroupsDict[i].sort(reverse=True)
                     tempAddedGroupsDict = addedGroupsDict[i]
                     addedGroupsDict[i].sort()
-                if self.length - int(tempAddedGroupsDict[0]) < int(addedGroupsDict["bromo"][0]):
-                    FlipValues = True
-                else:
-                    break
+                    if self.length - int(tempAddedGroupsDict[0]) < int(addedGroupsDict[i][0]):
+                        FlipValues = True
+                    else:
+                        break
+        
+        # Logic check
+        if self.length == 1:
+            FlipValues = False
         
         
         # Flip the number values if necessary
@@ -284,11 +302,14 @@ class Molecule():
             addedGroupsDict["chloro"] = tempChloro
         
         
+        otherGroupsPresent = False
+        
         # Loop through the items in addedGroupsDict
         for x, y in addedGroupsDict.items():
             
             # Check there are values in the dictionary
             if len(y) >= 1:
+                otherGroupsPresent = True
                 instancecount = 0
                 # If only one value present, just add it to the name
                 if len(y) == 1:
@@ -308,16 +329,25 @@ class Molecule():
             name = name[:-1]
         
         # No functional group name needed for an alkane
-        if self.funcEndBool or self.functionalGroupName == "Alkane":
+        
+        print("Functional Group: " + self.functionalGroupName)
+        
+        
+        # Add in check for length 3 central fgs 
+        if self.functionalGroupName == "endalcohol" and self.length <= 2 and not otherGroupsPresent:
+            name += IUPACLengthStems[self.length - 1] + "an" + self.stem
+        elif self.functionalGroupName == "alkane" or (self.functionalGroupName in self.endGroups and self.functionalGroupName != "endalcohol"):
             name += IUPACLengthStems[self.length - 1] + self.stem
-        elif self.functionalGroupName == "Alkene":
+        elif self.functionalGroupName == "alkene":
             if self.length <= 3:
                 name += IUPACLengthStems[self.length - 1] + self.stem
             else:
                 if FlipValues:
-                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos) + "-" + str(self.stem)
+                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)
                 else:
-                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos) + "-" + str(self.stem)
+                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)
+        elif self.length == 3 and self.functionalGroupName in self.centralGroups and self.functionalGroupName != "alcohol":
+            name += IUPACLengthStems[self.length - 1] + "an" + self.stem
         # Add functional group name, position and main length stem to name
         else:
             name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)

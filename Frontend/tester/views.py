@@ -12,7 +12,9 @@ import datetime
 import re
 
 def index(request):
-    return render(request, "tester/index.html", {})
+    
+    context = {"userclass": models.returnUserClass(request.session["current_user"]), "user_name": request.session["current_user"]}
+    return render(request, "tester/index.html", context)
 
 def login(request):
     try:
@@ -81,17 +83,22 @@ def question(request, selected_length):
     
     valid_groups = request.session['list']
     testMolecule = MoleculeGenerator.Molecule(selected_length, valid_groups)
-    testMolecule.generate()
-    nameForPrinting  = testMolecule.outputMolecule()
-    
-    svg = SVGGenerator.createSVG(testMolecule.length, testMolecule)
-    
-    request.session['molecule_name'] = nameForPrinting
-    request.session['image'] = svg
-    
-    context = {"molecule_name" : nameForPrinting, "image" : svg}
-     
-    return render(request, "tester/question.html", context)
+    output = testMolecule.generate()
+    if output:
+        context = {"errormessage" : output}
+        return render(request, "tester/testsettings.html", context)
+    else:
+        print(testMolecule.functionalGroupName)
+        nameForPrinting  = testMolecule.outputMolecule()
+        
+        svg = SVGGenerator.createSVG(testMolecule.length, testMolecule)
+        
+        request.session['molecule_name'] = nameForPrinting
+        request.session['image'] = svg
+        
+        context = {"molecule_name" : nameForPrinting, "image" : svg}
+        
+        return render(request, "tester/question.html", context)
 
 def answerquestion(request):
     user_answer = request.POST.get('Answer', False)
@@ -131,15 +138,30 @@ def registeraccount(request):
         if utils.validateEmail(request.POST["Email"]):
             pwrd = request.POST["Password"]
             if any(i.isdigit() for i in pwrd) and any(i == i.lower() and not i.isdigit() for i in pwrd) and any(i == i.upper() and not i.isdigit() for i in pwrd):
-                models.createUser(request.POST["Username"], 
-                                request.POST["Password"], 
-                                request.POST["Firstname"], 
-                                request.POST["Lastname"],
-                                request.POST["Email"],
-                                request.POST["Class"],
-                                bool(request.POST["TeacherBool"]),)
-                request.session["ErrorMessage"] = ""
-                return HttpResponseRedirect(reverse("tester:login"))
+                if request.POST["Username"] not in models.getExistingStudentNames():
+                    try:
+                        models.createUser(request.POST["Username"], 
+                                        request.POST["Password"], 
+                                        request.POST["Firstname"], 
+                                        request.POST["Lastname"],
+                                        request.POST["Email"],
+                                        request.POST["Class"],
+                                        bool(request.POST["TeacherBool"]),)
+                        request.session["ErrorMessage"] = ""
+                        return HttpResponseRedirect(reverse("tester:login"))
+                    except:
+                        models.createUser(request.POST["Username"], 
+                                        request.POST["Password"], 
+                                        request.POST["Firstname"], 
+                                        request.POST["Lastname"],
+                                        request.POST["Email"],
+                                        request.POST["Class"],
+                                        False,)
+                        request.session["ErrorMessage"] = ""
+                        return HttpResponseRedirect(reverse("tester:login"))
+                else:
+                    request.session["ErrorMessage"] = "Username already exists"
+                    return HttpResponseRedirect(reverse("tester:register"))
             else:
                 request.session["ErrorMessage"] = "Password must contain a digit, uppercase and lowercase letter"
                 return HttpResponseRedirect(reverse("tester:register"))
@@ -164,6 +186,11 @@ def loginaccount(request):
     except:
         request.session["ErrorMessage"] = "Invalid Username Or Password"
         return HttpResponseRedirect(reverse("tester:login"))
+
+def logoutaccount(request):
+    
+    request.session["current_user"] = ""
+    return HttpResponseRedirect(reverse("tester:login"))
 
 def newquestion(request):
     if request.session["test_over"] == "n":

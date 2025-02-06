@@ -11,7 +11,7 @@ class FunctionalGroup():
 class Alkane(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Alkane"
+        self.name = "alkane"
         self.stem = "ane"
     
     def addFunctionalGroup(self, carbon):
@@ -21,7 +21,7 @@ class Alkane(FunctionalGroup):
 class Alkene(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Alkene"
+        self.name = "alkene"
         self.stem = "ene"
     
     def addFunctionalGroup(self, carbon):
@@ -33,7 +33,7 @@ class Alkene(FunctionalGroup):
 class Alcohol(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Alcohol"
+        self.name = "alcohol"
         self.stem = "ol"
     
     def addFunctionalGroup(self, carbon):
@@ -43,7 +43,7 @@ class Alcohol(FunctionalGroup):
 class Amine(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Amine"
+        self.name = "amine"
         self.stem = "amine"
     
     def addFunctionalGroup(self, carbon):
@@ -53,7 +53,7 @@ class Amine(FunctionalGroup):
 class Ketone(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Ketone"
+        self.name = "ketone"
         self.stem = "one"
     
     def addFunctionalGroup(self, carbon):
@@ -65,7 +65,7 @@ class Ketone(FunctionalGroup):
 class CarboxylicAcid(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Carboxylic Acid"
+        self.name = "carboxylicacid"
         self.stem = "anoic acid"
         self.element = "Hydroxy"
     
@@ -77,7 +77,7 @@ class CarboxylicAcid(FunctionalGroup):
 class Aldehyde(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Aldehyde"
+        self.name = "aldehyde"
         self.stem = "anal"
     
     def addFunctionalGroup(self, carbon):
@@ -89,7 +89,7 @@ class Aldehyde(FunctionalGroup):
 class AcylChloride(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Acyl Chloride"
+        self.name = "acylchloride"
         self.stem = "anoyl chloride"
     
     def addFunctionalGroup(self, carbon):
@@ -100,7 +100,7 @@ class AcylChloride(FunctionalGroup):
 class Amide(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Amide"
+        self.name = "amide"
         self.stem = "anamide"
     
     def addFunctionalGroup(self, carbon):
@@ -111,8 +111,8 @@ class Amide(FunctionalGroup):
 class EndAlcohol(FunctionalGroup):
     def __init__(self):
         super().__init__()
-        self.name = "Alcohol"
-        self.stem = "anol"
+        self.name = "endalcohol"
+        self.stem = "ol"
     
     def addFunctionalGroup(self, carbon):
         carbon.addBondedAtom(atom.HydroxyGroup())

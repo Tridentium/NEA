@@ -196,14 +196,20 @@ def createSVG(length, molecule):
                             calculateDistance(2, 3, 2, 0))))
             # Increment the symbol count to access the next symbol
             symNum += 1
-            
+            print("------------------")
+            print(symbols)
+            print(symNum)
+            print("-----------------------")
             # Add the final symbol
-            svg_document.add(svg_document.text(symbols[symNum - 2],
-            x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0, doubleletter), ), 
-            y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
+            if oxygendoublebond:
+                svg_document.add(svg_document.text(symbols[symNum - 2],
+                x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0, doubleletter), ), 
+                y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
+            else:
+                svg_document.add(svg_document.text(symbols[symNum],
+                x = (calculateDistance(numberofCs + 1, (numberofCs + 1) * 2, numberofCs + 1, 0, doubleletter), ), 
+                y = (calculateDistance(1, 2, 2, 0), ), style = "font-size:20px; font-family:Arial"))
         else:
-            symNum += 1
-            
             # Add the main carbon atom
             svg_document.add(svg_document.text("C",
             x = (calculateDistance(i, (i) * 2, i, 0, doubleletter), ), 

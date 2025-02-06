@@ -18,7 +18,7 @@
       <!-- Implements Django's protections against Cross Site Request Forgeries -->
       {% csrf_token %}
 
-      <br><br><br>
+      <br><br>
       <fieldset>
   
       
@@ -65,13 +65,13 @@
       <!-- Create Teacher Checkbox -->
       <label>Teacher? </label>
       <input type="checkbox" name="TeacherBool" value="True">
-      <br><br>
+      <br>
 
       <!-- Create Submit Entry Button -->
       <div>
 
-      <p id = "ErrorMessage">{{ ErrorMessage }}</p>
-      <br><br>
+      <p id = "ErrorMessage" class = "error">{{ ErrorMessage }}</p>
+      <br>
       <input type="submit" value="Register">
       </div>
     </form>

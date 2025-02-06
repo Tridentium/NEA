@@ -8,19 +8,42 @@
     <title>My test page</title>
   </head>
   <body>
-    <h1>Index Page</h1>
-    <h2>Links:</h2>
+    <br><br><br><br>
+    <h1>Organic Chemistry Testing Tool</h1>
+
+    <br><br><br><br>
     <div>
-    <a href = "{% url 'tester:testsettings' %}">Test Settings</a>
-    <a href = "{% url 'tester:login' %}">Login</a>
-    <a href = "{% url 'tester:profile' %}">Account</a>
+    <a href = "{% url 'tester:testsettings' %}">
+      <button class = "navigation">Begin Test</button>
+    </a><br><br><br><br>
+    <a href = "{% url 'tester:login' %}"><button class = "navigation">Login</button></a><br>
    </div>
-   <form action="{% url 'tester:newquestion' %}" method="post">
 
-    <br><br>
-    <input type="submit" value="Login">
-    </div>
 
-  </form>  
+   <div>
+
+    <button class = "classdisplay" id = "classbutton"></button>
+    <a id = "loginlink"><button class = "loginbutton" id = "loginlinkbutton"></button></a>
+
+   </div>
+
+  <script>
+
+    if ("{{ userclass }}"){
+      document.getElementById("classbutton").textContent = "Class: {{ userclass }}"
+    } else{
+      document.getElementById("classbutton").textContent = "Guest"
+    }
+
+    if ("{{ user_name }}"){
+      document.getElementById("loginlink").href = "{% url 'tester:profile' %}"
+      document.getElementById("loginlinkbutton").textContent = "{{ user_name }}"
+    } else {
+      document.getElementById("loginlink").href = "{% url 'tester:login' %}"
+      document.getElementById("loginlinkbutton").textContent = "Login"
+    }
+
+  </script>
+
   </body>
 </html>

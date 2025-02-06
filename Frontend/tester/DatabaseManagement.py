@@ -47,7 +47,7 @@ def createUser(user_name, password, first_name, last_name, email, user_class, te
     
     mycursor = mydb.cursor()
     mycursor.execute(f"""INSERT INTO Student (user_name, password, email, first_name, last_name, user_class, Teacher)
-                     VALUES('{user_name}', '{password}', '{first_name}', '{last_name}', '{email}', '{user_class}', '{teacher_bool}');""")
+                     VALUES('{user_name}', '{password}', '{email}', '{first_name}', '{last_name}', '{user_class}', '{teacher_bool}');""")
     mydb.commit()
     
 def returnUserPassword(user_name):
@@ -152,4 +152,18 @@ def getStudentsByClass(user_class):
   mycursor = mydb.cursor()
   mycursor.execute(f"""SELECT user_name FROM Student WHERE user_class= '{user_class}'""")
   return mycursor.fetchall()
-print(getStudentsByClass("Class1"))
+
+def getExistingStudentNames():
+  mydb = mysql.connector.connect(
+    host="localhost",
+    user="Admin",
+    password="Perfectnova123!",
+    database = "testerdb"
+    )   
+
+  mycursor = mydb.cursor()
+  mycursor.execute(f"""SELECT user_name FROM Student""")
+  usernameList = []
+  for i in mycursor.fetchall():
+    usernameList.append(i[0])
+  return usernameList
