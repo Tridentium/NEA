@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+# Django backend to handle access to urls
 app_name = "tester"
 urlpatterns = [
     path("", views.index, name = "index"),
