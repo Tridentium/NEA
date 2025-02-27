@@ -102,7 +102,7 @@ def createSVG(length, molecule):
             # Increment the symbol count
             symNum += 1
             
-            # Add the third symbol (as this is the first molecule)
+            # Add the third symbol (as this is the first atom)
             svg_document.add(svg_document.text(symbols[symNum],
                                                
             # Define its x and y position

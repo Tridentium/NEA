@@ -4,108 +4,107 @@ import tester.FunctionalGroups as fg
 import math
 
 
-# List of IUPAC prefixes for both length and repetition of groups
-IUPACLengthStems = ["meth", "eth", "prop", "but", "pent", "hex", "hept", "oct", "non", "dec"]
-IUPACRepetitionPrefixes = ["", "", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
-
 class Molecule():
     
     # Define Variables for molecule
     def __init__(self, maxLength, valid_groups):
-        self.atoms = []
-        self.maxLength = maxLength
-        self.functionalGroupName = ""
-        self.length = 0
-        self.stem = None
-        self.funcEndBool = False
-        self.functionGroupPos = 0
-        self.addedGroups = {}
-        self.validGroups = valid_groups
+        self.__atoms = []
+        self.__maxLength = maxLength
+        self.__functionalGroupName = ""
+        self.__length = 0
+        self.__stem = None
+        self.__funcEndBool = False
+        self.__functionGroupPos = 0
+        self.__addedGroups = {}
+        self.__validGroups = valid_groups
         
         # Define the allowed groups at the end and at the centre of a molecule for later validation
-        self.centralGroups = ["alkane", "amine", "alcohol", "alkene", "ketone"]
-        self.endGroups = ["endalcohol", "aldehyde", "carboxylicacid", "amide", "acylchloride"]
+        self.__centralGroups = ["alkane", "amine", "alcohol", "alkene", "ketone"]
+        self.__endGroups = ["endalcohol", "aldehyde", "carboxylicacid", "amide", "acylchloride"]
+        # List of IUPAC prefixes for both length and repetition of groups
+        self.__IUPACLengthStems = ["meth", "eth", "prop", "but", "pent", "hex", "hept", "oct", "non", "dec"]
+        self.__IUPACRepetitionPrefixes = ["", "", "di", "tri", "tetra", "penta", "hexa", "hepta", "octa", "nona", "deca"]
     
     # Generate an instance of a molecule
     def generate(self):
         
         # Initial determination of whether the functional group will be at the end of the molecule
         funcEndChance = random.randint(1, 3)
-        self.funcEndBool = False
+        self.__funcEndBool = False
         
         if funcEndChance >= 3:
-            self.funcEndBool = True
+            self.__funcEndBool = True
 
         # Ensure that funcEndBool is true if only end functional groups have been selected and vica versa
-        if self.funcEndBool:
+        if self.__funcEndBool:
             
             funcEndBoolNotValid = True
             
             # Check whether there is an end functional group in the selection
-            for i in self.validGroups:
-                if i in self.endGroups:
+            for i in self.__validGroups:
+                if i in self.__endGroups:
                     funcEndBoolNotValid = False
             
             # Set funcEndBool to false if there are no end groups in the molecule
             if funcEndBoolNotValid:
-                self.funcEndBool = False
+                self.__funcEndBool = False
         else:
             
             funcEndBoolNotValid = True
             
             # Check whether there is an central functional group in the selection
-            for i in self.validGroups:
-                if i in self.centralGroups:
+            for i in self.__validGroups:
+                if i in self.__centralGroups:
                     funcEndBoolNotValid = False
             
             # Set funcEndBool to true if there are no central groups in the molecule
             if funcEndBoolNotValid:
-                self.funcEndBool = True
+                self.__funcEndBool = True
         
         # Validation to catch an invalid combination of max length and select groups (string presented as an error message)
         
-        if self.maxLength == 2 and self.funcEndBool == False:
+        if self.__maxLength == 2 and self.__funcEndBool == False:
             return "That combination of lengths and functional groups is invalid"
         
         # Validation to catch if the user forgets to select a functional group (string presented as an error message)
         
-        if not self.validGroups:
+        if not self.__validGroups:
             return "You must select at least one functional group"
         
         # Define a valid length and position of functional group for the molecule
-        if self.funcEndBool:
-            self.length = random.randint(1, self.maxLength - 1)
-            self.functionGroupPos = random.randint(0, 1)
+        if self.__funcEndBool:
+            self.__length = random.randint(1, self.__maxLength - 1)
+            self.__functionGroupPos = random.randint(0, 1)
             
             # Sets the functional group position to the other end of the moleulce if the random value is 1
             
-            if self.functionGroupPos == 1:
-                self.functionGroupPos = self.length - 1
+            if self.__functionGroupPos == 1:
+                self.__functionGroupPos = self.__length - 1
         
         # Define a valid length and position of functional group for the molecule      
         else:
             
             # The molecule must have at least one atom between its end atoms, and therefore must have a minimum length of 3
-            self.length = random.randint(3, self.maxLength)
+            self.__length = random.randint(3, self.__maxLength)
             
-            # If block to catch errors when the length of the molecule is exactly 3 (self.length - 2 == 1 causing randint to break)
-            if self.length == 3:
-                self.functionGroupPos = 1
+            # If block to catch errors when the length of the molecule is exactly 3 (self.__length - 2 == 1 causing randint to break)
+            if self.__length == 3:
+                self.__functionGroupPos = 1
             else:
-                self.functionGroupPos = random.randint(1, self.length - 2)
+                self.__functionGroupPos = random.randint(1, self.__length - 2)
 
         # Debug prints:
         # print("-------------------")
-        # print(self.length)
-        # print(self.validGroups)
-        # print(self.funcEndBool)
-        # print(self.functionGroupPos)
+        # print(self.__length)
+        # print(self.__validGroups)
+        # print(self.__funcEndBool)
+        # print(self.__functionGroupPos)
         # print("-------------------")
         
         # Iteration to create each carbon object in the molecule
-        for i in range(self.length):
+        for i in range(self.__length):
             
-            if i != self.functionGroupPos:
+            if i != self.__functionGroupPos:
                 
                 # Adds either a hydrogen or halogen to the current carbon
                 carbon = atom.Carbon()
@@ -115,19 +114,19 @@ class Molecule():
                 
                 # Adds the functional group combination to the current carbon
                 carbon = atom.Carbon()
-                self.functionalGroupName = self.addFunctionalGroup(carbon, self.funcEndBool)
-            self.atoms.append(carbon)
+                self.__functionalGroupName = self.addFunctionalGroup(carbon, self.__funcEndBool)
+            self.__atoms.append(carbon)
         
-        if self.functionGroupPos != 0:
+        if self.__functionGroupPos != 0:
             
             # Adds an extra hydrogen to the first carbon if it does not contain the functional group
-            self.atoms[0].addBondedAtom(atom.Hydrogen())
+            self.__atoms[0].addBondedAtom(atom.Hydrogen())
         
         # Also activates if length == 1 as that carbon would need 4 bonding groups to be 'full'
-        if self.functionGroupPos != self.length - 1 or self.length == 1:
+        if self.__functionGroupPos != self.__length - 1 or self.__length == 1:
             
             # Adds an extra hydrogen to the last carbon if it does not contain the functional group
-            self.atoms[self.length-1].addBondedAtom(atom.Hydrogen())
+            self.__atoms[self.__length-1].addBondedAtom(atom.Hydrogen())
     
     # Function to decide whether to add a hydrogen or halogen atom to a chain carbon            
     def decideAtom(self, index):
@@ -144,10 +143,10 @@ class Molecule():
         elif diceRoll <= 95:
             
             # Adding value to naming algorithm
-            if not str(index) in self.addedGroups:
-                self.addedGroups[str(index)] = ["chloro"]
+            if not str(index) in self.__addedGroups:
+                self.__addedGroups[str(index)] = ["chloro"]
             else:
-                self.addedGroups[str(index)].append("chloro")
+                self.__addedGroups[str(index)].append("chloro")
             
             # Creating Chlorine atom
             chlorine = atom.Chlorine()
@@ -157,10 +156,10 @@ class Molecule():
         elif diceRoll <= 100:
             
             # Adding value to naming algorithm
-            if not str(index) in self.addedGroups:
-                self.addedGroups[str(index)] = ["bromo"]
+            if not str(index) in self.__addedGroups:
+                self.__addedGroups[str(index)] = ["bromo"]
             else:
-                self.addedGroups[str(index)].append("bromo")
+                self.__addedGroups[str(index)].append("bromo")
             
             # Creating Bromine atom
             bromine = atom.Bromine()
@@ -176,49 +175,49 @@ class Molecule():
             diceRoll = random.randint(0, 100)
             
             # 20% chance that an Alcohol will be the main functional group of the molecule if selected
-            if diceRoll <= 20 and "alcohol" in self.validGroups:
+            if diceRoll <= 20 and "alcohol" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.EndAlcohol()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that an Aldehyde will be the main functional group of the molecule if selected
-            elif diceRoll <= 40 and "aldehyde" in self.validGroups:
+            elif diceRoll <= 40 and "aldehyde" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Aldehyde()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that an Carboxylic acid will be the main functional group of the molecule if selected
-            elif diceRoll <= 60 and "carboxylicacid" in self.validGroups:
+            elif diceRoll <= 60 and "carboxylicacid" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.CarboxylicAcid()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that an Amide will be the main functional group of the molecule if selected
-            elif diceRoll <= 80 and "amide" in self.validGroups:
+            elif diceRoll <= 80 and "amide" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Amide()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that an Acyl Chloride will be the main functional group of the molecule if selected
-            elif diceRoll <= 100 and "acylchloride" in self.validGroups:
+            elif diceRoll <= 100 and "acylchloride" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.AcylChloride()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
 
             else:
                 return self.addFunctionalGroup(carbon, funcEndBool)
@@ -228,48 +227,48 @@ class Molecule():
             diceRoll = random.randint(0, 100)
             
             # 20% chance that the molecule will be an Alkane if selected
-            if diceRoll <= 20 and "alkane" in self.validGroups:
+            if diceRoll <= 20 and "alkane" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alkane()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that the molecule will be an Amine if selected
-            elif diceRoll <= 40 and "amine" in self.validGroups:
+            elif diceRoll <= 40 and "amine" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Amine()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that the molecule will be an Alcohol if selected
-            elif diceRoll <= 60 and "alcohol" in self.validGroups:
+            elif diceRoll <= 60 and "alcohol" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alcohol()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             
             # 20% chance that the molecule will be an Alkene if selected
-            elif diceRoll <= 80 and "alkene" in self.validGroups:
+            elif diceRoll <= 80 and "alkene" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Alkene()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             # 20% chance that the molecule will be an Ketone if selected
-            elif diceRoll <= 100 and "ketone" in self.validGroups:
+            elif diceRoll <= 100 and "ketone" in self.__validGroups:
                 
                 # Instantiates functional group and updates molecule variables
                 functionalGroup = fg.Ketone()
                 functionalGroup.addFunctionalGroup(carbon)
-                self.stem = functionalGroup.stem
-                return functionalGroup.name
+                self.__stem = functionalGroup.getStem()
+                return functionalGroup.getName()
             else:
                 return self.addFunctionalGroup(carbon, funcEndBool)
             
@@ -286,7 +285,7 @@ class Molecule():
                             }
         
         # Loop through added prefix groups on each carbon add them and their positions to the dictionary 
-        for x, y in self.addedGroups.items():
+        for x, y in self.__addedGroups.items():
             for i in y:
                 addedGroupsDict[i].append(str(int(x) + 1))
         
@@ -294,11 +293,11 @@ class Molecule():
         FlipValues = False
         
         # Minimise the value of the functional group position via rotation if it is past the midpoint of the molecule
-        if self.functionGroupPos + 1 > math.ceil(self.length / 2) and self.functionalGroupName != "Alkane":
+        if self.__functionGroupPos + 1 > math.ceil(self.__length / 2) and self.__functionalGroupName != "Alkane":
             FlipValues = True
         
         # If the functional group is at the centre of the molecule (which has to therefore have an odd length) check whether it is possible to minimise the number value of the extra groups
-        elif (self.length % 2 == 1 and self.length//2 == self.functionGroupPos) or self.functionalGroupName == "Alkane":
+        elif (self.__length % 2 == 1 and self.__length//2 == self.__functionGroupPos) or self.__functionalGroupName == "Alkane":
             addedGroupsKeys = addedGroupsDict.keys()
             
             for i in addedGroupsKeys:
@@ -308,13 +307,13 @@ class Molecule():
                     addedGroupsDict[i].sort(reverse=True)
                     tempAddedGroupsDict = addedGroupsDict[i]
                     addedGroupsDict[i].sort()
-                    if self.length - int(tempAddedGroupsDict[0]) < int(addedGroupsDict[i][0]):
+                    if self.__length - int(tempAddedGroupsDict[0]) < int(addedGroupsDict[i][0]):
                         FlipValues = True
                     else:
                         break
         
         # Logic check
-        if self.length == 1:
+        if self.__length == 1:
             FlipValues = False
         
         
@@ -322,15 +321,15 @@ class Molecule():
         if FlipValues:
             
             # Calculate the value of the flipped functional group position
-            self.functionGroupPos = self.length - self.functionGroupPos - 1
+            self.__functionGroupPos = self.__length - self.__functionGroupPos - 1
             
             # For each extra group, calculate its flipped position and assign to the main dictionary
             tempBromo = []
             tempChloro = []
             for i in addedGroupsDict["chloro"]:
-                tempChloro.append(str(self.length - int(i) + 1))
+                tempChloro.append(str(self.__length - int(i) + 1))
             for i in addedGroupsDict["bromo"]:
-                tempBromo.append(str(self.length - int(i) + 1))
+                tempBromo.append(str(self.__length - int(i) + 1))
             tempBromo.sort()
             tempChloro.sort()
             addedGroupsDict["bromo"] = tempBromo
@@ -365,7 +364,7 @@ class Molecule():
                         name += ","
                     name = name[:-1]    
                 # Add the stems to the name
-                name += "-" + IUPACRepetitionPrefixes[instancecount] + x + "-"
+                name += "-" + self.__IUPACRepetitionPrefixes[instancecount] + x + "-"
                 
         # Remove the last , or - to allow it to combine with the main stem
         if len(name) > 0:
@@ -374,34 +373,34 @@ class Molecule():
         # Selection tree for each naming case:
         
         # A short alcohol without extra groups shouldn't have a position number
-        if self.functionalGroupName == "endalcohol" and self.length <= 2 and not otherGroupsPresent:
-            name += IUPACLengthStems[self.length - 1] + "an" + self.stem
+        if self.__functionalGroupName == "endalcohol" and self.__length <= 2 and not otherGroupsPresent:
+            name += self.__IUPACLengthStems[self.__length - 1] + "an" + self.__stem
         
         # Alkane and end groups do not need a position indicator (unless it is a long alcohol, as alcohols can be both end and central groups)
-        elif self.functionalGroupName == "alkane" or (self.functionalGroupName in self.endGroups and self.functionalGroupName != "endalcohol"):
-            name += IUPACLengthStems[self.length - 1] + self.stem
+        elif self.__functionalGroupName == "alkane" or (self.__functionalGroupName in self.__endGroups and self.__functionalGroupName != "endalcohol"):
+            name += self.__IUPACLengthStems[self.__length - 1] + self.__stem
         
         # Alkenes have a more complicated naming process
-        elif self.functionalGroupName == "alkene":
+        elif self.__functionalGroupName == "alkene":
             
             # Short alkenes do not need a position number
-            if self.length <= 3:
-                name += IUPACLengthStems[self.length - 1] + self.stem
+            if self.__length <= 3:
+                name += self.__IUPACLengthStems[self.__length - 1] + self.__stem
                 
             else:
                 # If an alkene is flipped, its position should be counted from the closest carbon to the other side
                 if FlipValues:
-                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos) + "-" + str(self.stem)
+                    name += self.__IUPACLengthStems[self.__length - 1] + "-" + str(self.__functionGroupPos) + "-" + str(self.__stem)
                 else:
-                    name += IUPACLengthStems[self.length - 1] + "-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)
+                    name += self.__IUPACLengthStems[self.__length - 1] + "-" + str(self.__functionGroupPos + 1) + "-" + str(self.__stem)
         
         # Central groups in a 3-length molecule only have one possible position and therefore do not need a number (apart from alcohols as aforementioned)
-        elif self.length == 3 and self.functionalGroupName in self.centralGroups and self.functionalGroupName != "alcohol":
-            name += IUPACLengthStems[self.length - 1] + "an" + self.stem
+        elif self.__length == 3 and self.__functionalGroupName in self.__centralGroups and self.__functionalGroupName != "alcohol":
+            name += self.__IUPACLengthStems[self.__length - 1] + "an" + self.__stem
         
         # If all other checks failed, add the general name structure
         else:
-            name += IUPACLengthStems[self.length - 1] + "an-" + str(self.functionGroupPos + 1) + "-" + str(self.stem)
+            name += self.__IUPACLengthStems[self.__length - 1] + "an-" + str(self.__functionGroupPos + 1) + "-" + str(self.__stem)
         return name
     
     # Get symbols on atoms for rendering
@@ -409,9 +408,12 @@ class Molecule():
         
         # Define and add symbols from each atom object
         symbols = []
-        for j in self.atoms[index].getAtoms():
-            symbols.append(j.symbol)
+        for j in self.__atoms[index].getAtoms():
+            symbols.append(j.getSymbol())
         return symbols
+    
+    def getLength(self):
+        return self.__length
 
 # Debugging functions
 # newMolecule = Molecule(3)

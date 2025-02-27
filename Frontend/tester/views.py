@@ -136,7 +136,7 @@ def question(request, selected_length):
         nameForPrinting  = testMolecule.outputMolecule()
         
         # Generate the molecule's render as an SVG
-        svg = SVGGenerator.createSVG(testMolecule.length, testMolecule)
+        svg = SVGGenerator.createSVG(testMolecule.getLength(), testMolecule)
         
         # Save the SVG and name
         request.session['molecule_name'] = nameForPrinting

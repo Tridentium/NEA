@@ -36,6 +36,8 @@
     </div>
 
     <script>
+
+      // Selection and iteration statement to create the buttons for each student in the class
       if ("{{ studentnames }}"){
         studentnames = "{{ studentnames }}".split(/\s*,\s*/);
         for (let index = 0; index < studentnames.length; index++) {
@@ -46,6 +48,8 @@
           document.getElementById("studentnamebuttons").appendChild(newButton);
         }
       }
+
+      // Selection and iteration statement to display the selected student's recently answered questions
       if ("{{ requestedstudentdata }}"){
         questionresultsarray = "{{ requestedstudentdata }}".split(", ");
         for (let index = 0; index < questionresultsarray.length; index++) {

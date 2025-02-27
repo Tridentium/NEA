@@ -1,6 +1,6 @@
 import mysql.connector
 
-# Below commented functions were run to define each individual table
+# Commented functions were run to generate each individual table
 
 # mydb = mysql.connector.connect(
 #   host="localhost",
@@ -53,8 +53,9 @@ def createUser(user_name, password, first_name, last_name, email, user_class, te
     
     # Create the user using the provided values
     mycursor = mydb.cursor()
-    mycursor.execute(f"""INSERT INTO Student (user_name, password, email, first_name, last_name, user_class, Teacher)
-                     VALUES('{user_name}', '{password}', '{email}', '{first_name}', '{last_name}', '{user_class}', '{teacher_bool}');""")
+    mycursor.execute("""INSERT INTO Student (user_name, password, email, first_name, last_name, user_class, Teacher)
+                     VALUES(%s, %s, %s, %s, %s, %s, %s);""",
+                     (user_name, password, email, first_name, last_name, user_class, teacher_bool,))
     mydb.commit()
 
 # Define a function to return the password of a specific user
@@ -70,7 +71,7 @@ def returnUserPassword(user_name):
 
     # Return the password of the provided user
     mycursor = mydb.cursor()
-    mycursor.execute(f"""SELECT password FROM Student WHERE user_name = '{user_name}'""")
+    mycursor.execute("""SELECT password FROM Student WHERE user_name = %s""", (user_name,))
     return mycursor.fetchall()[0][0]
 
 # Define a function to return the email of a specific user
@@ -86,7 +87,7 @@ def returnUserEmail(user_name):
 
     # Return the email of the provided user
     mycursor = mydb.cursor()
-    mycursor.execute(f"""SELECT email FROM Student WHERE user_name = '{user_name}'""")
+    mycursor.execute("""SELECT email FROM Student WHERE user_name = %s""", (user_name,))
     return mycursor.fetchall()[0][0]
 
 # Define a function to return the class of a specific user
@@ -102,7 +103,7 @@ def returnUserClass(user_name):
 
     # Return the class of the provided user
     mycursor = mydb.cursor()
-    mycursor.execute(f"""SELECT user_class FROM Student WHERE user_name = '{user_name}'""")
+    mycursor.execute("""SELECT user_class FROM Student WHERE user_name = %s""", (user_name,))
     return mycursor.fetchall()[0][0]
 
 # Define a function to return the ID of a specific user
@@ -118,7 +119,7 @@ def returnUserID(user_name):
 
     # Return the ID of the provided user
     mycursor = mydb.cursor()
-    mycursor.execute(f"""SELECT id FROM Student WHERE user_name = '{user_name}'""")
+    mycursor.execute("""SELECT id FROM Student WHERE user_name = %s""", (user_name,))
     return mycursor.fetchall()[0][0]
 
 # Define a function to return whether or not a certain user is a teacher
@@ -134,7 +135,7 @@ def returnUserTeacherStatus(user_name):
 
     # Return teacher status of the provided user
     mycursor = mydb.cursor()
-    mycursor.execute(f"""SELECT Teacher FROM Student WHERE user_name = '{user_name}'""")
+    mycursor.execute("""SELECT Teacher FROM Student WHERE user_name = %s""", (user_name,))
     return mycursor.fetchall()[0][0]
 
 # Define a function to create a question
@@ -150,8 +151,9 @@ def createQuestion(molecule_name, question_datetime, user_id, outcome):
 
     # Create the question and commit the change to the database
     mycursor = mydb.cursor()
-    mycursor.execute(f"""INSERT INTO Question (molecule_name, question_datetime, user_id, outcome)
-                     VALUES('{molecule_name}', '{question_datetime}', '{user_id}', '{outcome}');""")
+    mycursor.execute("""INSERT INTO Question (molecule_name, question_datetime, user_id, outcome)
+                     VALUES(%s, %s, %s, %s);""",
+                     (molecule_name, question_datetime, user_id, outcome,))
     mydb.commit()
 
 # Define a function to return the questions answered by a specific user
@@ -167,7 +169,7 @@ def getQuestionsAnsweredByUser(user_name):
 
   # Return the last 5 questions answered by the specified user
   mycursor = mydb.cursor()
-  mycursor.execute(f"""SELECT Question.molecule_name, Question.outcome FROM Question, Student WHERE Question.user_id = Student.id AND Student.user_name = '{user_name}' LIMIT 5""")
+  mycursor.execute("""SELECT Question.molecule_name, Question.outcome FROM Question, Student WHERE Question.user_id = Student.id AND Student.user_name = %s LIMIT 5""", (user_name,))
   return mycursor.fetchall()
 
 # Define a function to return the students in a class
@@ -183,7 +185,7 @@ def getStudentsByClass(user_class):
 
   # Return the list of students in the specified class
   mycursor = mydb.cursor()
-  mycursor.execute(f"""SELECT user_name FROM Student WHERE user_class= '{user_class}'""")
+  mycursor.execute("""SELECT user_name FROM Student WHERE user_class= %s""", (user_class,))
   return mycursor.fetchall()
 
 # Define a function to get a list of all assigned student names for validation during login
@@ -199,7 +201,7 @@ def getExistingStudentNames():
 
   # Retrieve and return the list of usernames as a list
   mycursor = mydb.cursor()
-  mycursor.execute(f"""SELECT user_name FROM Student""")
+  mycursor.execute("""SELECT user_name FROM Student""")
   usernameList = []
   for i in mycursor.fetchall():
     usernameList.append(i[0])
